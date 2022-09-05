@@ -76,6 +76,10 @@ jobs:
             Library-${{ matrix.projectPath }}-
             Library-
 
+      - name: install third party dependencies
+        run: ./scripts/install-unity-assets-from-github-source.sh
+        shell: bash
+
       - uses: game-ci/unity-builder@v2
         id: builds
         env:
