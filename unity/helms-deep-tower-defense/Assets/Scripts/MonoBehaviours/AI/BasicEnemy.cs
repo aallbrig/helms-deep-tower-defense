@@ -30,6 +30,7 @@ namespace MonoBehaviours.AI
             if (ReachedTarget())
                 return TaskStatus.Success;
 
+            transform.LookAt(target);
             transform.position = Vector3.MoveTowards(transform.position, target.position, config.MoveSpeed * Time.deltaTime);
             MovedTowardsPosition?.Invoke(target.position);
             return TaskStatus.Continue;
