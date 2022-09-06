@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using MonoBehaviours;
 using MonoBehaviours.AI;
 using NUnit.Framework;
 using UnityEngine;
@@ -9,7 +11,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 {
     public class BasicEnemyAndAPathToFollow
     {
-        private void Setup(in List<GameObject> destroyList, out GameObject sutInstance)
+        private void Setup(in List<GameObject> destroyList, out GameObject enemy, out GameObject path)
         {
             var testCamera = new GameObject { transform = { position = new Vector3(0, 10, -10) } };
             testCamera.AddComponent<Camera>();
@@ -17,11 +19,20 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             testCamera.tag = "MainCamera";
             destroyList.Add(testCamera);
 
-            sutInstance = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Basic Enemy"));
-            sutInstance.name = "System Under Test (sut)";
-            destroyList.Add(sutInstance);
+            enemy = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Basic Enemy"));
+            enemy.name = "System Under Test (sut)";
+            destroyList.Add(enemy);
 
-            testCamera.transform.LookAt(sutInstance.transform);
+            path = new GameObject();
+            path.name = "Test path";
+            var pathComponent = path.AddComponent<Path>();
+            pathComponent.pathPoints.Add(
+                new GameObject{ name = "Test path point [0]", transform = { position = new Vector3(0, 0, 10) }}.transform
+            );
+            destroyList.AddRange(pathComponent.pathPoints.ToList().Select(tr => tr.gameObject));
+            destroyList.Add(path);
+
+            testCamera.transform.LookAt(enemy.transform);
         }
 
         private void Teardown(List<GameObject> gameObjects)
@@ -32,20 +43,18 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         }
 
         [UnityTest]
-        public IEnumerator BasicEnemy_CanRunTowards_ATarget()
+        public IEnumerator BasicEnemy_CanFollow_APath()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var enemy);
+            Setup(destroyList, out var enemy, out var path);
 
-            var testTargetPosition = new Vector3(0, 0, 30);
             var recordedPosition = Vector3.zero;
-            var path = new GameObject { transform = { position = testTargetPosition}};
             var basicEnemyScript = enemy.GetComponent<BasicEnemy>();
-            basicEnemyScript.target = path.transform;
-            basicEnemyScript.MovedTowardsPosition += actualTargetPosition => recordedPosition = actualTargetPosition;
+            basicEnemyScript.path = path.GetComponent<Path>();
+            basicEnemyScript.MovedTowardsPosition += targetPosition => recordedPosition = targetPosition;
             yield return null;
 
-            Assert.AreEqual(testTargetPosition, recordedPosition);
+            Assert.AreEqual(path.GetComponent<Path>().pathPoints[0].position, recordedPosition);
 
             Teardown(destroyList);
         }
