@@ -16,29 +16,23 @@ namespace MonoBehaviours.AI
 
         private void Awake()
         {
-            _tree = new BehaviorTreeBuilder(gameObject)
-                .Selector()
-                    .Sequence()
-                        .Condition(HasTarget)
-                        .Do(MoveToTarget)
-                    .End()
-                .End()
-                .Build();
+            config ??= ScriptableObject.CreateInstance<EnemyConfiguration>();
+            _tree = config.BuildBehaviorTree(gameObject);
         }
 
-        private TaskStatus MoveToTarget()
+        public TaskStatus MoveToTarget()
         {
             if (target == null) return TaskStatus.Failure;
             
             if (Vector3.Distance(target.position, transform.position) < 0.3f)
                 return TaskStatus.Success;
 
-            transform.position = Vector3.MoveTowards(transform.position, target.position, config.moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target.position, config.MoveSpeed * Time.deltaTime);
             MovedTowardsPosition?.Invoke(target.position);
             return TaskStatus.Continue;
         }
 
-        private bool HasTarget() => target != null;
+        public bool HasTarget() => target != null;
 
         private void Update()
         {

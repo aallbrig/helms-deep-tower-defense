@@ -37,15 +37,15 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var destroyList = new List<GameObject>();
             Setup(destroyList, out var enemy);
 
-            var expectedPosition = new Vector3(0, 0, 30);
+            var testTargetPosition = new Vector3(0, 0, 30);
             var recordedPosition = Vector3.zero;
-            var path = new GameObject { transform = { position = expectedPosition}};
+            var path = new GameObject { transform = { position = testTargetPosition}};
             var basicEnemyScript = enemy.GetComponent<BasicEnemy>();
             basicEnemyScript.target = path.transform;
-            basicEnemyScript.MovedTowardsPosition += targetPosition => recordedPosition = targetPosition;
+            basicEnemyScript.MovedTowardsPosition += actualTargetPosition => recordedPosition = actualTargetPosition;
             yield return null;
 
-            Assert.AreEqual(expectedPosition, recordedPosition);
+            Assert.AreEqual(testTargetPosition, recordedPosition);
 
             Teardown(destroyList);
         }
