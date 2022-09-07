@@ -5,7 +5,6 @@ unity_project_root="${SCRIPT_DIR}/../unity/helms-deep-tower-defense"
 # data struct = dir name | github URL | branch | source sub folder | destination folder
 target_repos=( \
   "NavMeshComponents|https://github.com/Unity-Technologies/NavMeshComponents.git|2020.2|Assets/NavMeshComponents|${unity_project_root}/Assets/NavMeshComponents" \
-  "TextMeshPro|https://github.com/Unity-Technologies/NavMeshComponents.git|2020.2|Assets/NavMeshComponents|${unity_project_root}/Assets/NavMeshComponents" \
 )
 
 for repo in "${target_repos[@]}" ; do
