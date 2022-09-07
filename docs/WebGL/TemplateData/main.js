@@ -7,7 +7,7 @@ var config = {
     streamingAssetsUrl: "StreamingAssets",
     companyName: "Andrew Allbright",
     productName: "helms-deep-tower-defense",
-    productVersion: "0.0.13",
+    productVersion: "0.0.15",
     devicePixelRatio: 1,
 }
 
