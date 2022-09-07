@@ -43,7 +43,9 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
-    "com.fluid.behavior-tree": "2.2.2"
+    "com.fluid.behavior-tree": "2.2.2",
+    "com.de-panther.webxr": "0.15.0-preview",
+    "com.de-panther.webxr-interactions": "0.15.0-preview"
   },
   "testables": [
     "com.unity.inputsystem"
@@ -53,6 +55,8 @@
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
+        "com.de-panther.webxr",
+        "com.de-panther.webxr-interactions",
         "com.openupm",
         "net.tnrd.nsubstitute"
       ]

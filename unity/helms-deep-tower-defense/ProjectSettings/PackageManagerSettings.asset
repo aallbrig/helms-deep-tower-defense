@@ -28,6 +28,8 @@ MonoBehaviour:
     m_Name: package.openupm.com
     m_Url: https://package.openupm.com
     m_Scopes:
+    - com.de-panther.webxr
+    - com.de-panther.webxr-interactions
     - com.openupm
     - net.tnrd.nsubstitute
     m_IsDefault: 0
@@ -48,6 +50,8 @@ MonoBehaviour:
       m_Name: package.openupm.com
       m_Url: https://package.openupm.com
       m_Scopes:
+      - com.de-panther.webxr
+      - com.de-panther.webxr-interactions
       - com.openupm
       - net.tnrd.nsubstitute
       m_IsDefault: 0
@@ -56,6 +60,8 @@ MonoBehaviour:
     m_Name: package.openupm.com
     m_Url: https://package.openupm.com
     m_Scopes:
+    - com.de-panther.webxr
+    - com.de-panther.webxr-interactions
     - com.openupm
     - net.tnrd.nsubstitute
     m_SelectedScopeIndex: 0

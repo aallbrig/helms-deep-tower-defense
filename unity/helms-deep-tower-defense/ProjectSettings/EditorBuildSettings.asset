@@ -9,4 +9,5 @@ EditorBuildSettings:
     path: Assets/Resources/Scenes/Main.unity
     guid: e28a5fd8c317b45eaa382be36de376b3
   m_configObjects:
+    WebXR.Settings: {fileID: 11400000, guid: 7bca5cfe520fc4aff98e7d25eff2a471, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 2802f9f6f014feb46b61bd20bd92028a, type: 2}
