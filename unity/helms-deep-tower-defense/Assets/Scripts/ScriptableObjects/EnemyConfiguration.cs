@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ScriptableObjects
 {
-    public interface IBehaviorTreeBuilder<T>
+    public interface IBehaviorTreeBuilder<in T>
     {
         public BehaviorTree BuildBehaviorTree(T context);
     }
@@ -22,6 +22,8 @@ namespace ScriptableObjects
         public BehaviorTree BuildBehaviorTree(GameObject context)
         {
             var basicEnemy = context.GetComponent<BasicEnemy>();
+            // If enemy has a path to follow, follow the path.
+            // otherwise, if the enemy has a target to go to, go to target
             return new BehaviorTreeBuilder(context)
                 .Selector()
                     .Sequence()
