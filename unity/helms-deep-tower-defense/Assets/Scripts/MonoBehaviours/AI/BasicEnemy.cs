@@ -18,7 +18,7 @@ namespace MonoBehaviours.AI
         public Transform target;
         public bool debugEnabled = false;
 
-        private Transform Target
+        public Transform Target
         {
             get => target;
             set
