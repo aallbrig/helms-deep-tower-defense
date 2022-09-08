@@ -79,6 +79,14 @@ namespace MonoBehaviours.AI
             return path != null;
         }
 
+        public TaskStatus ForgetPath()
+        {
+            if (path == null) return TaskStatus.Failure;
+            ForgottenPath?.Invoke(path);
+            path = null;
+            return TaskStatus.Success;
+        }
+
         public TaskStatus FollowPath()
         {
             DebugLog($"FollowPath | (# of path points {path.pathPoints.Count}, currentPointIndex {_currentPathPointIndex})");
@@ -119,5 +127,7 @@ namespace MonoBehaviours.AI
         {
             if (debugEnabled) Debug.Log($"<BasicEnemy> | {logMessage}");
         }
+
+        public event Action<Path> ForgottenPath;
     }
 }

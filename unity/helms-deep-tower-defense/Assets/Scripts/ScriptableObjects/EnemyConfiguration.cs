@@ -29,6 +29,7 @@ namespace ScriptableObjects
                     .Sequence()
                         .Condition(basicEnemy.HasPath)
                         .Do(basicEnemy.FollowPath)
+                        .Do(basicEnemy.ForgetPath)
                     .End()
                     .Sequence()
                         .Condition(basicEnemy.HasTarget)
