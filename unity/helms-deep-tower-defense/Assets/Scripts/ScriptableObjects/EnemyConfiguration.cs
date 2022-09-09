@@ -12,12 +12,16 @@ namespace ScriptableObjects
     public interface IEnemyConfig
     {
         public float MoveSpeed { get; }
+        public float AttackDelay { get; }
+        public float AttackDamage { get; }
     }
 
     [CreateAssetMenu(fileName = "enemy configuration", menuName = "Game/new enemy configuration", order = 0)]
     public class EnemyConfiguration : ScriptableObject, IEnemyConfig, IBehaviorTreeBuilder<GameObject>
     {
         public float moveSpeed = 3.5f;
+        public float attackDelay = 2.0f;
+        public float attackDamage = 1.0f;
 
         public BehaviorTree BuildBehaviorTree(GameObject context)
         {
@@ -26,6 +30,11 @@ namespace ScriptableObjects
             // otherwise, if the enemy has a target to go to, go to target
             return new BehaviorTreeBuilder(context)
                 .Selector()
+                    .Sequence()
+                        .Condition(basicEnemy.HasDamageable)
+                        .Condition(basicEnemy.CanAttackDamageable)
+                        .Do(basicEnemy.AttackDamageable)
+                    .End()
                     .Sequence()
                         .Condition(basicEnemy.HasPath)
                         .Do(basicEnemy.FollowPath)
@@ -40,5 +49,7 @@ namespace ScriptableObjects
         }
 
         public float MoveSpeed => moveSpeed;
+        public float AttackDelay => attackDelay;
+        public float AttackDamage => attackDamage;
     }
 }

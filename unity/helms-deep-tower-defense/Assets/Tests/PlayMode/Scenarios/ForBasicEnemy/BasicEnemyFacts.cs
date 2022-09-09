@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using MonoBehaviours.AI;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -19,6 +20,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 
             enemy = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Basic Enemy"));
             enemy.name = "System Under Test (sut)";
+            enemy.GetComponent<BasicEnemy>().debugEnabled = true;
             destroyList.Add(enemy);
 
             testCamera.transform.LookAt(enemy.transform);
@@ -63,6 +65,51 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 
             Assert.NotNull(rigidBodyComponent, "rigid body component exists");
             Assert.IsFalse(rigidBodyComponent.useGravity, "does not use gravity");
+
+            Teardown(destroyList);
+        }
+
+        [UnityTest]
+        public IEnumerator BasicEnemy_UsesA_Collider()
+        {
+            var destroyList = new List<GameObject>();
+            Setup(destroyList, out var enemy);
+
+            yield return null;
+
+            var collider = enemy.GetComponent<BoxCollider>();
+
+            Assert.NotNull(collider, "collider component exists");
+
+            Teardown(destroyList);
+        }
+
+        [UnityTest]
+        public IEnumerator BasicEnemy_UsesA_Damageable_OnCollision()
+        {
+            var damaged = false;
+            var destroyList = new List<GameObject>();
+            Setup(destroyList, out var enemy);
+
+            var mockDamageable = new GameObject
+            {
+                name = "Mock damageable",
+                transform = { position = enemy.transform.position }
+            };
+            var rigidBody = mockDamageable.AddComponent<Rigidbody>();
+            rigidBody.useGravity = false;
+            var collider = mockDamageable.AddComponent<BoxCollider>();
+            collider.size = new Vector3(3, 3, 3);
+            collider.isTrigger = true;
+
+            var damageableComponent = mockDamageable.AddComponent<MonoBehaviours.Castle>();
+            damageableComponent.Damaged += () => damaged = true;
+            destroyList.Add(mockDamageable);
+
+            yield return null;
+            yield return null;
+
+            Assert.IsTrue(damaged, "damaged when colliders are touching");
 
             Teardown(destroyList);
         }

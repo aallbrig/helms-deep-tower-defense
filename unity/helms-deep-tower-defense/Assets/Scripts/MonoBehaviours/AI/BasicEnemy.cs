@@ -1,6 +1,7 @@
 ﻿using System;
 using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
+using Model.Combat;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -11,12 +12,15 @@ namespace MonoBehaviours.AI
         public event Action<Transform> NewTargetAcquired;
         public event Action<Vector3> MovedTowardsPosition;
         public event Action<GameObject> ReachedPoint;
+        public event Action<IDamageable<float>> DiscoveredDamageable;
+        public event Action<IDamageable<float>> DamageableAttacked;
 
         public EnemyConfiguration config;
         public Path path;
         private int _currentPathPointIndex = 0;
         public Transform target;
         public bool debugEnabled = false;
+        private IDamageable<float> _damageable;
 
         public Transform Target
         {
@@ -34,11 +38,13 @@ namespace MonoBehaviours.AI
         }
 
         private BehaviorTree _tree;
+        private float _lastAttackTime;
 
         private void Awake()
         {
             config ??= ScriptableObject.CreateInstance<EnemyConfiguration>();
             _tree = config.BuildBehaviorTree(gameObject);
+            _lastAttackTime = Time.time - config.AttackDelay;
         }
 
         public TaskStatus MoveToTarget()
@@ -73,9 +79,18 @@ namespace MonoBehaviours.AI
         {
             _tree.Tick();
         }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent<IDamageable<float>>(out var damageable))
+            {
+                _damageable = damageable;
+                DiscoveredDamageable?.Invoke(_damageable);
+            }
+        }
         public bool HasPath()
         {
-            DebugLog($"HasPath | (path != null {path != null})");
+            DebugLog($"HasPath | knows about path? {path != null}");
             return path != null;
         }
 
@@ -129,5 +144,24 @@ namespace MonoBehaviours.AI
         }
 
         public event Action<Path> ForgottenPath;
+
+        public bool HasDamageable()
+        {
+            DebugLog($"HasDamageable | damageable reference exists? {_damageable != null}");
+            return _damageable != null;
+        }
+        public bool CanAttackDamageable()
+        {
+            DebugLog($"CanAttackDamageable | Can attack? {Time.time - _lastAttackTime >= config.AttackDelay}");
+            return Time.time - _lastAttackTime >= config.AttackDelay;
+        }
+        public TaskStatus AttackDamageable()
+        {
+            DebugLog($"AttackDamageable | Attacking damageable");
+            _damageable.Damage(config.AttackDamage);
+            DamageableAttacked?.Invoke(_damageable);
+            _lastAttackTime = Time.time;
+            return TaskStatus.Success;
+        }
     }
 }

@@ -25,6 +25,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         {
             enemy = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Basic Enemy"));
             enemy.name = $"{enemy.name} (test)";
+            enemy.GetComponent<BasicEnemy>().debugEnabled = true;
             destroyList.Add(enemy);
         }
         private void SetupPath(in List<GameObject> destroyList, out GameObject path)
@@ -76,6 +77,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var basicEnemyScript = enemy.GetComponent<BasicEnemy>();
             basicEnemyScript.path = path.GetComponent<Path>();
             basicEnemyScript.MovedTowardsPosition += targetPosition => recordedPosition = targetPosition;
+
             yield return null;
 
             Assert.AreEqual(path.GetComponent<Path>().pathPoints[0].position, recordedPosition);
