@@ -1,16 +1,29 @@
 ﻿using System;
 using Model.Combat;
+using MonoBehaviours.Combat;
 using UnityEngine;
 
 namespace MonoBehaviours
 {
-    public class Castle : MonoBehaviour, IDamageable<float>, IKillable
+    public class Castle : MonoBehaviour, IDamageable, IKillable, IHaveHealth
     {
+        // Gotta work around limitations of [SerializeReference]
+        public HealthSlider slider;
         public float maxHealth = 100f;
         private float _currentHealth;
+
+        private void Awake()
+        {
+            if (slider)
+            {
+                slider.Damageable = this;
+                slider.TrackHealthOf = this;
+            }
+            _currentHealth = maxHealth;
+        }
+
         private void Start()
         {
-            _currentHealth = maxHealth;
             Killed += () => gameObject.SetActive(false);
         }
 
@@ -29,5 +42,6 @@ namespace MonoBehaviours
         {
             Killed?.Invoke();
         }
+        public float CurrentHealthNormalized() => _currentHealth / maxHealth;
     }
 }

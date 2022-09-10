@@ -52,7 +52,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 
             var recordedPosition = Vector3.zero;
             var basicEnemyScript = enemy.GetComponent<BasicEnemy>();
-            basicEnemyScript.target = target.transform;
+            basicEnemyScript.theTarget = target.transform;
             basicEnemyScript.MovedTowardsPosition += targetPosition => recordedPosition = targetPosition;
             yield return null;
 
@@ -68,7 +68,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Setup(new TestSetupConfig { TargetPosition = new Vector3(10, 0, 10)}, destroyList, out var enemy, out var target);
 
             var basicEnemyScript = enemy.GetComponent<BasicEnemy>();
-            basicEnemyScript.Target = target.transform;
+            basicEnemyScript.target = target.transform;
             yield return null;
 
             Assert.IsTrue(enemy.transform.forward.normalized == (target.transform.position - enemy.transform.position).normalized);

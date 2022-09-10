@@ -2,9 +2,9 @@
 
 namespace Model.Combat
 {
-    public interface IDamageable<T>
+    public interface IDamageable
     {
-        public event Action<T> Damaged;
-        public void Damage(T damage);
+        public event Action<float> Damaged;
+        public void Damage(float damage);
     }
 }
