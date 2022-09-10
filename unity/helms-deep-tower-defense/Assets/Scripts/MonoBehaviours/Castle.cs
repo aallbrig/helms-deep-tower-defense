@@ -11,6 +11,7 @@ namespace MonoBehaviours
         private void Start()
         {
             _currentHealth = maxHealth;
+            Killed += () => gameObject.SetActive(false);
         }
 
         public event Action<float> Damaged;

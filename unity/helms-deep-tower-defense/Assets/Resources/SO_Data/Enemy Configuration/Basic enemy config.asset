@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Basic enemy config
   m_EditorClassIdentifier: 
   moveSpeed: 3.5
+  attackDelay: 2
+  attackDamage: 5
