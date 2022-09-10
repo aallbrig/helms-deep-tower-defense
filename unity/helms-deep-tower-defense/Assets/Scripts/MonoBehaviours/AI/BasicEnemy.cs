@@ -2,12 +2,13 @@
 using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
 using Model.Combat;
+using Model.Locomotion;
 using ScriptableObjects;
 using UnityEngine;
 
 namespace MonoBehaviours.AI
 {
-    public class BasicEnemy : MonoBehaviour
+    public class BasicEnemy : MonoBehaviour, IFollowPath
     {
         public event Action<Transform> NewTargetAcquired;
         public event Action<Vector3> MovedTowardsPosition;
@@ -17,7 +18,8 @@ namespace MonoBehaviours.AI
         public event Action<IDamageable> DamageableAttacked;
 
         public EnemyConfiguration config;
-        public Path path;
+        public Path path { get => currentPath; set => currentPath = value; }
+        public Path currentPath;
         private int _currentPathPointIndex = 0;
         public Transform theTarget;
         public bool debugEnabled = false;
@@ -46,6 +48,7 @@ namespace MonoBehaviours.AI
             config ??= ScriptableObject.CreateInstance<EnemyConfiguration>();
             _tree = config.BuildBehaviorTree(gameObject);
             _lastAttackTime = Time.time - config.AttackDelay;
+            path = currentPath;
         }
 
         public TaskStatus MoveToTarget()
