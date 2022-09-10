@@ -40,7 +40,21 @@ namespace Tests.PlayMode.Scenarios.ForCastle
 
             var castleComponent = castle.GetComponent<MonoBehaviours.Castle>();
             Assert.NotNull(castleComponent, "component exists");
-            Assert.NotNull(castleComponent.hitBox, "has a hit box");
+
+            Teardown(destroyList);
+        }
+
+        [UnityTest]
+        public IEnumerator Castle_UsesA_Trigger()
+        {
+            var destroyList = new List<GameObject>();
+            Setup(destroyList, out var castle);
+
+            yield return null;
+
+            var component = castle.GetComponent<BoxCollider>();
+            Assert.NotNull(component, "collider exists");
+            Assert.NotNull(component.isTrigger, "collider is a trigger");
 
             Teardown(destroyList);
         }
@@ -52,7 +66,7 @@ namespace Tests.PlayMode.Scenarios.ForCastle
             Setup(destroyList, out var castle);
             var castleComponent = castle.GetComponent<MonoBehaviours.Castle>();
             var damaged = false;
-            castleComponent.Damaged += () => damaged = true;
+            castleComponent.Damaged += _ => damaged = true;
             yield return null;
 
             castleComponent.Damage(1);

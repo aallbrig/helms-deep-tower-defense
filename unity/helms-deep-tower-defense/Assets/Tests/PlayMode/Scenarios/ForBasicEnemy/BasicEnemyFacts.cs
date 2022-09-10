@@ -85,31 +85,61 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         }
 
         [UnityTest]
-        public IEnumerator BasicEnemy_UsesA_Damageable_OnCollision()
+        public IEnumerator BasicEnemy_UsesA_Damageable_OnTriggerEnter()
         {
+            var damageableDiscovered = false;
             var damaged = false;
             var destroyList = new List<GameObject>();
             Setup(destroyList, out var enemy);
+            enemy.GetComponent<BasicEnemy>().DiscoveredDamageable += _ => damageableDiscovered = true;
 
             var mockDamageable = new GameObject
             {
                 name = "Mock damageable",
                 transform = { position = enemy.transform.position }
             };
-            var rigidBody = mockDamageable.AddComponent<Rigidbody>();
-            rigidBody.useGravity = false;
+            var damageableComponent = mockDamageable.AddComponent<MonoBehaviours.Castle>();
+            damageableComponent.Damaged += _ => damaged = true;
             var collider = mockDamageable.AddComponent<BoxCollider>();
             collider.size = new Vector3(3, 3, 3);
             collider.isTrigger = true;
-
-            var damageableComponent = mockDamageable.AddComponent<MonoBehaviours.Castle>();
-            damageableComponent.Damaged += () => damaged = true;
             destroyList.Add(mockDamageable);
 
             yield return null;
             yield return null;
 
-            Assert.IsTrue(damaged, "damaged when colliders are touching");
+            Assert.IsTrue(damageableDiscovered, "damageable discovered");
+            Assert.IsTrue(damaged, "damageable attacked");
+
+            Teardown(destroyList);
+        }
+
+        [UnityTest]
+        public IEnumerator BasicEnemy_ForgetsA_Damageable_OnTriggerExit()
+        {
+            var damageableForgotten = false;
+            var destroyList = new List<GameObject>();
+            Setup(destroyList, out var enemy);
+            enemy.GetComponent<BasicEnemy>().ForgotDamageable += _ => damageableForgotten = true;
+
+            var mockDamageable = new GameObject
+            {
+                name = "Mock damageable",
+                transform = { position = enemy.transform.position }
+            };
+            var damageableComponent = mockDamageable.AddComponent<MonoBehaviours.Castle>();
+            var collider = mockDamageable.AddComponent<BoxCollider>();
+            collider.size = new Vector3(3, 3, 3);
+            collider.isTrigger = true;
+            destroyList.Add(mockDamageable);
+
+            yield return null;
+            yield return null;
+            damageableComponent.transform.position = enemy.transform.position + new Vector3(0, 100, 0);
+            yield return null;
+            yield return null;
+
+            Assert.IsTrue(damageableForgotten, "damageable forgotten when not touching");
 
             Teardown(destroyList);
         }

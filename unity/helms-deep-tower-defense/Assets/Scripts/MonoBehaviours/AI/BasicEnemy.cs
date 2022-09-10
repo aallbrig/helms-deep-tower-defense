@@ -12,6 +12,7 @@ namespace MonoBehaviours.AI
         public event Action<Transform> NewTargetAcquired;
         public event Action<Vector3> MovedTowardsPosition;
         public event Action<GameObject> ReachedPoint;
+        public event Action<IDamageable<float>> ForgotDamageable;
         public event Action<IDamageable<float>> DiscoveredDamageable;
         public event Action<IDamageable<float>> DamageableAttacked;
 
@@ -82,12 +83,29 @@ namespace MonoBehaviours.AI
 
         private void OnTriggerEnter(Collider other)
         {
+            if (_damageable != null) return;
+
             if (other.TryGetComponent<IDamageable<float>>(out var damageable))
             {
                 _damageable = damageable;
                 DiscoveredDamageable?.Invoke(_damageable);
             }
         }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (_damageable == null) return;
+
+            if (other.TryGetComponent<IDamageable<float>>(out var damageable))
+            {
+                if (_damageable == damageable)
+                {
+                    _damageable = null;
+                    ForgotDamageable?.Invoke(damageable);
+                }
+            }
+        }
+
         public bool HasPath()
         {
             DebugLog($"HasPath | knows about path? {path != null}");
