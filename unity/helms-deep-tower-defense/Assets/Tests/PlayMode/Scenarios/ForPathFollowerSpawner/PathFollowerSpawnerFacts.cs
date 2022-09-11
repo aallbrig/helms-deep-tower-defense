@@ -51,5 +51,24 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
 
             Teardown(destroyList);
         }
+        [UnityTest]
+        public IEnumerator PathFollowerSpawner_SpawnsGameObjects_BasedOnWaveConfig()
+        {
+            var spawned = false;
+            var destroyList = new List<GameObject>();
+            Setup(destroyList, out var spawner);
+            var spawnerComponent = spawner.GetComponent<PathFollowerSpawner>();
+            spawnerComponent.Spawned += _ => spawned = true;
+            spawnerComponent.pathFollower = new GameObject();
+            spawnerComponent.path = new GameObject().AddComponent<Path>();
+            var waveComponent = spawner.GetComponent<SpawnWave>();
+            yield return null;
+
+            spawnerComponent.GetComponent<ISpawner>().Spawn();
+
+            Assert.IsTrue(spawned);
+
+            Teardown(destroyList);
+        }
     }
 }

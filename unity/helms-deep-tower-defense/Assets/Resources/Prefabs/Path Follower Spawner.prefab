@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7295138661563093254}
   - component: {fileID: 8481293003522091819}
+  - component: {fileID: 2489824555563819487}
   m_Layer: 0
   m_Name: Path Follower Spawner
   m_TagString: Untagged
@@ -45,3 +46,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathFollower: {fileID: 0}
   path: {fileID: 0}
+--- !u!114 &2489824555563819487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3966887404578394085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08b207056606432ead48d1edfa8844a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: ec49dba3eb4ae4780b49b5f5cc3f3673, type: 2}
+  spawner: {fileID: 8481293003522091819}
