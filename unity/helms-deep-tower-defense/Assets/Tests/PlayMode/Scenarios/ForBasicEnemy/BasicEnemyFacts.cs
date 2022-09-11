@@ -65,6 +65,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 
             Assert.NotNull(rigidBodyComponent, "rigid body component exists");
             Assert.IsFalse(rigidBodyComponent.useGravity, "does not use gravity");
+            Assert.IsTrue(rigidBodyComponent.isKinematic, "basic enemies can move through each other (but still be able to trigger a trigger");
 
             Teardown(destroyList);
         }
