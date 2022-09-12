@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Model.Combat;
+using Model.Factories;
+using Model.Factories.Camera;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -9,20 +11,8 @@ namespace Tests.PlayMode.Scenarios.ForCastle
 {
     public class CastleFacts
     {
-        private void Setup(in List<GameObject> destroyList, out GameObject castle)
-        {
-            var testCamera = new GameObject { transform = { position = new Vector3(0, 10, -10) } };
-            testCamera.AddComponent<Camera>();
-            testCamera.name = "Test Scenario Camera";
-            testCamera.tag = "MainCamera";
-            destroyList.Add(testCamera);
-
-            castle = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Castle"));
-            castle.name = "System Under Test (sut)";
-            destroyList.Add(castle);
-
-            testCamera.transform.LookAt(castle.transform);
-        }
+        private readonly TestCamera _testCameraSpawner = new TestCamera(new Vector3(0, 10, -10));
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Castle");
 
         private void Teardown(List<GameObject> gameObjects)
         {
@@ -35,8 +25,11 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_UsesA_CastleComponent()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var castle);
-
+            var castle = _prefabSpawner.Spawn();
+            destroyList.Add(castle);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(castle.transform);
             yield return null;
 
             var castleComponent = castle.GetComponent<MonoBehaviours.Castle>();
@@ -49,8 +42,11 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_UsesA_Trigger()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var castle);
-
+            var castle = _prefabSpawner.Spawn();
+            destroyList.Add(castle);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(castle.transform);
             yield return null;
 
             var component = castle.GetComponent<BoxCollider>();
@@ -64,7 +60,11 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_CanBe_Attacked()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var castle);
+            var castle = _prefabSpawner.Spawn();
+            destroyList.Add(castle);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(castle.transform);
             var castleComponent = castle.GetComponent<MonoBehaviours.Castle>();
             var damaged = false;
             castleComponent.Damaged += _ => damaged = true;
@@ -81,7 +81,11 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_CanBe_Killed()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var castle);
+            var castle = _prefabSpawner.Spawn();
+            destroyList.Add(castle);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(castle.transform);
             var castleComponent = castle.GetComponent<MonoBehaviours.Castle>();
             var killed = false;
             castleComponent.Killed += () => killed = true;
@@ -98,7 +102,11 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_CanAssign_AttackPoint()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var castle);
+            var castle = _prefabSpawner.Spawn();
+            destroyList.Add(castle);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(castle.transform);
             var component = castle.GetComponent<IAssignAttackPoints>();
             yield return null;
 

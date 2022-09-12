@@ -6,6 +6,6 @@ namespace Model.Factories
     public interface ISpawner
     {
         public event Action<GameObject> Spawned;
-        public void Spawn();
+        public GameObject Spawn();
     }
 }

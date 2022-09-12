@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Factories;
+using Model.Factories.Camera;
 using MonoBehaviours.AI;
 using NUnit.Framework;
 using UnityEngine;
@@ -10,21 +12,8 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 {
     public class BasicEnemyFacts
     {
-        private void Setup(in List<GameObject> destroyList, out GameObject enemy)
-        {
-            var testCamera = new GameObject { transform = { position = new Vector3(0, 10, -10) } };
-            testCamera.AddComponent<Camera>();
-            testCamera.name = "Test Scenario Camera";
-            testCamera.tag = "MainCamera";
-            destroyList.Add(testCamera);
-
-            enemy = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Basic Enemy"));
-            enemy.name = "System Under Test (sut)";
-            enemy.GetComponent<BasicEnemy>().debugEnabled = true;
-            destroyList.Add(enemy);
-
-            testCamera.transform.LookAt(enemy.transform);
-        }
+        private readonly TestCamera _testCameraSpawner = new TestCamera(new Vector3(0, 10, -10));
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Basic Enemy");
 
         private void Teardown(List<GameObject> gameObjects)
         {
@@ -37,8 +26,11 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_UsesA_Animator()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var enemy);
-
+            var enemy = _prefabSpawner.Spawn();
+            destroyList.Add(enemy);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(enemy.transform);
             yield return null;
 
             var animatorComponent = enemy.GetComponent<Animator>();
@@ -57,8 +49,11 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_UsesA_RigidBody()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var enemy);
-
+            var enemy = _prefabSpawner.Spawn();
+            destroyList.Add(enemy);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(enemy.transform);
             yield return null;
 
             var rigidBodyComponent = enemy.GetComponent<Rigidbody>();
@@ -74,8 +69,11 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_UsesA_Collider()
         {
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var enemy);
-
+            var enemy = _prefabSpawner.Spawn();
+            destroyList.Add(enemy);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(enemy.transform);
             yield return null;
 
             var collider = enemy.GetComponent<BoxCollider>();
@@ -91,7 +89,11 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var damageableDiscovered = false;
             var damaged = false;
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var enemy);
+            var enemy = _prefabSpawner.Spawn();
+            destroyList.Add(enemy);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().DiscoveredDamageable += _ => damageableDiscovered = true;
 
             var mockDamageable = new GameObject
@@ -120,7 +122,11 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         {
             var damageableForgotten = false;
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var enemy);
+            var enemy = _prefabSpawner.Spawn();
+            destroyList.Add(enemy);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().ForgotDamageable += _ => damageableForgotten = true;
 
             var mockDamageable = new GameObject
@@ -149,7 +155,11 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         {
             var attackPointAcquired = false;
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var enemy);
+            var enemy = _prefabSpawner.Spawn();
+            destroyList.Add(enemy);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().AttackPointAcquired += _ => attackPointAcquired = true;
 
             var mockAssignAttackPoint = new GameObject

@@ -19,7 +19,7 @@ namespace MonoBehaviours.Factories
         }
 
         [ContextMenu("Spawn")]
-        public void Spawn()
+        public GameObject Spawn()
         {
             if (pathFollower != null)
             {
@@ -27,7 +27,9 @@ namespace MonoBehaviours.Factories
                 if (path != null && spawned.TryGetComponent<IFollowPath>(out var followPath))
                     followPath.path = path;
                 Spawned?.Invoke(spawned);
+                return spawned;
             }
+            return null;
         }
     }
 }

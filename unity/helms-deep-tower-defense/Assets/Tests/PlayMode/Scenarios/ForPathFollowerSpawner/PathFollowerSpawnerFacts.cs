@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Model.Factories;
+using Model.Factories.Camera;
 using MonoBehaviours;
 using MonoBehaviours.Factories;
 using NUnit.Framework;
@@ -11,20 +12,8 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
 {
     public class PathFollowerSpawnerFacts
     {
-        private void Setup(in List<GameObject> destroyList, out GameObject spawner)
-        {
-            var testCamera = new GameObject { transform = { position = new Vector3(0, 10, -10) } };
-            testCamera.AddComponent<Camera>();
-            testCamera.name = "Test Scenario Camera";
-            testCamera.tag = "MainCamera";
-            destroyList.Add(testCamera);
-
-            spawner = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Path Follower Spawner"));
-            spawner.name = "System Under Test (sut)";
-            destroyList.Add(spawner);
-
-            testCamera.transform.LookAt(spawner.transform);
-        }
+        private readonly TestCamera _testCameraSpawner = new TestCamera(new Vector3(0, 10, -10));
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Path Follower Spawner");
 
         private void Teardown(List<GameObject> gameObjects)
         {
@@ -38,7 +27,11 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
         {
             var spawned = false;
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var spawner);
+            var spawner = _prefabSpawner.Spawn();
+            destroyList.Add(spawner);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            testCamera.transform.LookAt(spawner.transform);
             var component = spawner.GetComponent<PathFollowerSpawner>();
             component.Spawned += _ => spawned = true;
             component.pathFollower = new GameObject();
@@ -51,17 +44,21 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
 
             Teardown(destroyList);
         }
+
         [UnityTest]
         public IEnumerator PathFollowerSpawner_SpawnsGameObjects_BasedOnWaveConfig()
         {
             var spawned = false;
             var destroyList = new List<GameObject>();
-            Setup(destroyList, out var spawner);
+            var testCamera = _testCameraSpawner.Spawn();
+            destroyList.Add(testCamera);
+            var spawner = _prefabSpawner.Spawn();
+            destroyList.Add(spawner);
+            testCamera.transform.LookAt(spawner.transform);
             var spawnerComponent = spawner.GetComponent<PathFollowerSpawner>();
             spawnerComponent.Spawned += _ => spawned = true;
             spawnerComponent.pathFollower = new GameObject();
             spawnerComponent.path = new GameObject().AddComponent<Path>();
-            var waveComponent = spawner.GetComponent<SpawnWave>();
             yield return null;
 
             spawnerComponent.GetComponent<ISpawner>().Spawn();
