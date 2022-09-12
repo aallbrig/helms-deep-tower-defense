@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Model.Combat;
+using MonoBehaviours;
 using NUnit.Framework;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -53,7 +55,7 @@ namespace Tests.PlayMode.Scenarios.ForTowers
 
             yield return null;
 
-            var component = tower.GetComponent<BoxCollider>();
+            var component = tower.GetComponent<Collider>();
             Assert.NotNull(component, "collider exists");
             Assert.NotNull(component.isTrigger, "collider is a trigger");
 
@@ -87,7 +89,8 @@ namespace Tests.PlayMode.Scenarios.ForTowers
             towerComponent.Killed += () => killed = true;
             yield return null;
 
-            towerComponent.Damage(towerComponent.maxHealth);
+            var configFacade = tower.GetComponent<ITowerConfig>();
+            towerComponent.Damage(configFacade.MaxHealth);
 
             Assert.IsTrue(killed);
 
