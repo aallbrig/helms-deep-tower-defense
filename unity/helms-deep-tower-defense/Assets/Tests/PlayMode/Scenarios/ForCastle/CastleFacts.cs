@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Model.Combat;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -91,6 +92,19 @@ namespace Tests.PlayMode.Scenarios.ForCastle
             Assert.IsTrue(killed);
 
             Teardown(destroyList);
+        }
+
+        [UnityTest]
+        public IEnumerator Castle_CanAssign_AttackPoint()
+        {
+            var destroyList = new List<GameObject>();
+            Setup(destroyList, out var castle);
+            var component = castle.GetComponent<IAssignAttackPoints>();
+            yield return null;
+
+            var attackPointTransform = component.AssignAttackPoint();
+            
+            Assert.NotNull(attackPointTransform);
         }
     }
 }

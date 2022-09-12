@@ -99,7 +99,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Path pathForgotten = null;
             var basicEnemyScript = enemy.GetComponent<BasicEnemy>();
             basicEnemyScript.path = path.GetComponent<Path>();
-            basicEnemyScript.ForgottenPath += path =>
+            basicEnemyScript.ForgotPath += path =>
             {
                 forgotPath = true;
                 pathForgotten = path;

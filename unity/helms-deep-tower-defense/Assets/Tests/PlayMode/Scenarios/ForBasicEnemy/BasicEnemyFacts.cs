@@ -144,5 +144,31 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 
             Teardown(destroyList);
         }
+        [UnityTest]
+        public IEnumerator BasicEnemy_UsesA_AssignAttackPoint_OnTriggerEnter()
+        {
+            var attackPointAcquired = false;
+            var destroyList = new List<GameObject>();
+            Setup(destroyList, out var enemy);
+            enemy.GetComponent<BasicEnemy>().AttackPointAcquired += _ => attackPointAcquired = true;
+
+            var mockAssignAttackPoint = new GameObject
+            {
+                name = "Mock damageable",
+                transform = { position = enemy.transform.position }
+            };
+            var component = mockAssignAttackPoint.AddComponent<MonoBehaviours.Castle>();
+            var collider = mockAssignAttackPoint.AddComponent<BoxCollider>();
+            collider.size = new Vector3(3, 3, 3);
+            collider.isTrigger = true;
+            destroyList.Add(mockAssignAttackPoint);
+
+            yield return null;
+            yield return null;
+
+            Assert.IsTrue(attackPointAcquired, "acquired attack point from trigger");
+
+            Teardown(destroyList);
+        }
     }
 }

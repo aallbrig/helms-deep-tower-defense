@@ -15,7 +15,10 @@ namespace MonoBehaviours.AI
         public event Action<GameObject> ReachedPoint;
         public event Action<IDamageable> ForgotDamageable;
         public event Action<IDamageable> DiscoveredDamageable;
+        public event Action<Transform> AttackPointAcquired;
         public event Action<IDamageable> DamageableAttacked;
+        public event Action<Path> ForgotPath;
+        public event Action<Transform> ForgotTarget;
 
         public EnemyConfiguration config;
         public Path path { get => currentPath; set => currentPath = value; }
@@ -25,16 +28,15 @@ namespace MonoBehaviours.AI
         public bool debugEnabled = false;
         private IDamageable _damageable;
 
-        public Transform target
+        public Transform Target
         {
             get => theTarget;
             set
             {
-                if (theTarget == null || !theTarget.Equals(value))
+                if (theTarget != value)
                 {
                     DebugLog("Target | setting target");
                     theTarget = value;
-                    transform.LookAt(theTarget);
                     NewTargetAcquired?.Invoke(theTarget);
                 }
             }
@@ -42,6 +44,7 @@ namespace MonoBehaviours.AI
 
         private BehaviorTree _tree;
         private float _lastAttackTime;
+        private Transform _attackPoint;
 
         private void Awake()
         {
@@ -49,34 +52,35 @@ namespace MonoBehaviours.AI
             _tree = config.BuildBehaviorTree(gameObject);
             _lastAttackTime = Time.time - config.AttackDelay;
             path = currentPath;
+            NewTargetAcquired += newTarget => transform.LookAt(newTarget);
         }
 
         public TaskStatus MoveToTarget()
         {
-            DebugLog($"<BasicEnemy> | MoveToTarget() | (Target {target}, reached target? {ReachedTarget()})");
-            if (target == null) return TaskStatus.Failure;
+            DebugLog($"<BasicEnemy> | MoveToTarget() | (Target {Target}, reached target? {ReachedTarget()})");
+            if (Target == null) return TaskStatus.Failure;
 
             if (ReachedTarget()) return TaskStatus.Success;
 
             transform.position = Vector3.MoveTowards(
                 transform.position,
-                target.position,
+                Target.position,
                 config.MoveSpeed * Time.deltaTime
             );
-            MovedTowardsPosition?.Invoke(target.position);
+            MovedTowardsPosition?.Invoke(Target.position);
             return TaskStatus.Continue;
         }
 
         private bool ReachedTarget()
         {
-            DebugLog($"ReachedTarget | (distance {Vector3.Distance(target.position, transform.position)})");
-            return Vector3.Distance(target.position, transform.position) < 0.3f;
+            DebugLog($"ReachedTarget | (distance {Vector3.Distance(Target.position, transform.position)})");
+            return Vector3.Distance(Target.position, transform.position) < 0.3f;
         }
 
         public bool HasTarget()
         {
-            DebugLog($"HasTarget | (Target != null {target != null})");
-            return target != null;
+            DebugLog($"HasTarget | (Target != null {Target != null})");
+            return Target != null;
         }
 
         private void Update()
@@ -88,11 +92,26 @@ namespace MonoBehaviours.AI
         {
             if (_damageable != null) return;
 
-            if (other.TryGetComponent<IDamageable>(out var damageable))
+            if (_damageable == null && other.TryGetComponent<IDamageable>(out var damageable))
             {
                 _damageable = damageable;
                 DiscoveredDamageable?.Invoke(_damageable);
             }
+            if (_attackPoint == null && other.TryGetComponent<IAssignAttackPoints>(out var attackPointAssigner))
+            {
+                var attackPoint = attackPointAssigner.AssignAttackPoint();
+                _attackPoint = attackPoint;
+                ForgetPath();
+                ForgetTarget();
+                Target = _attackPoint;
+                AttackPointAcquired?.Invoke(_attackPoint);
+            }
+        }
+
+        private void ForgetTarget()
+        {
+            ForgotTarget?.Invoke(Target);
+            Target = null;
         }
 
         private void OnTriggerExit(Collider other)
@@ -118,19 +137,19 @@ namespace MonoBehaviours.AI
         public TaskStatus ForgetPath()
         {
             if (path == null) return TaskStatus.Failure;
-            ForgottenPath?.Invoke(path);
+            ForgotPath?.Invoke(path);
             path = null;
             return TaskStatus.Success;
         }
 
         public TaskStatus FollowPath()
         {
-            DebugLog($"FollowPath | (# of path points {path.pathPoints.Count}, currentPointIndex {_currentPathPointIndex})");
             if (path == null || path.pathPoints.Count == 0)
             {
                 DebugLog($"FollowPath | path is null or path points == 0; failure");
                 return TaskStatus.Failure;
             }
+            DebugLog($"FollowPath | (# of path points {path.pathPoints.Count}, currentPointIndex {_currentPathPointIndex})");
 
             if (_currentPathPointIndex == path.pathPoints.Count)
             {
@@ -142,17 +161,17 @@ namespace MonoBehaviours.AI
 
             var currentPoint = path.pathPoints[_currentPathPointIndex];
             DebugLog($"FollowPath | current point location {currentPoint.position}");
-            if (target == null || !target.Equals(currentPoint))
+            if (Target == null || !Target.Equals(currentPoint))
             {
-                var oldPosition = target == null ? Vector3.zero : target.position;
+                var oldPosition = Target == null ? Vector3.zero : Target.position;
                 DebugLog($"<BasicEnemy> | FollowPath | setting new target (old: {oldPosition}, new: {currentPoint.position}");
-                target = currentPoint;
+                Target = currentPoint;
             }
 
             var status = MoveToTarget();
             if (status == TaskStatus.Success)
             {
-                ReachedPoint?.Invoke(target.gameObject);
+                ReachedPoint?.Invoke(Target.gameObject);
                 _currentPathPointIndex++;
             }
 
@@ -164,7 +183,6 @@ namespace MonoBehaviours.AI
             if (debugEnabled) Debug.Log($"<BasicEnemy> | {logMessage}");
         }
 
-        public event Action<Path> ForgottenPath;
 
         public bool HasDamageable()
         {
