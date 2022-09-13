@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Model.Factories.Camera
 {
-    public class TestCamera: ISpawner
+    public class TestCameraSpawner: ISpawner
     {
         public event Action<GameObject> Spawned;
         private readonly Vector3 _position;
 
-        public TestCamera(Vector3 position) => _position = position;
+        public TestCameraSpawner(Vector3 position) => _position = position;
 
         public GameObject Spawn()
         {

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using MonoBehaviours;
 using MonoBehaviours.AI;
 using NUnit.Framework;
 using UnityEngine;
@@ -60,6 +59,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.IsTrue(castleAttacked);
 
             Teardown(destroyList);
+            yield return null;
         }
     }
 }

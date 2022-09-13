@@ -12,7 +12,7 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
 {
     public class PathFollowerSpawnerFacts
     {
-        private readonly TestCamera _testCameraSpawner = new TestCamera(new Vector3(0, 10, -10));
+        private readonly TestCameraSpawner _testCameraSpawner = new TestCameraSpawner(new Vector3(0, 10, -10));
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Path Follower Spawner");
 
         private void Teardown(List<GameObject> gameObjects)
@@ -43,6 +43,7 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
             Assert.IsTrue(spawned);
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -66,6 +67,7 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
             Assert.IsTrue(spawned);
 
             Teardown(destroyList);
+            yield return null;
         }
     }
 }

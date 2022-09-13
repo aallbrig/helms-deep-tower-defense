@@ -83,6 +83,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.AreEqual(path.GetComponent<Path>().pathPoints[0].position, recordedPosition);
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -111,6 +112,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.AreEqual(path, pathForgotten.gameObject, "the path passed in was forgotten");
 
             Teardown(destroyList);
+            yield return null;
         }
     }
 }

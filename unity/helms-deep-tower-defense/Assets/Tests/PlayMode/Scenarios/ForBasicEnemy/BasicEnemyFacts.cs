@@ -12,7 +12,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 {
     public class BasicEnemyFacts
     {
-        private readonly TestCamera _testCameraSpawner = new TestCamera(new Vector3(0, 10, -10));
+        private readonly TestCameraSpawner _testCameraSpawner = new TestCameraSpawner(new Vector3(0, 10, -10));
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Basic Enemy");
 
         private void Teardown(List<GameObject> gameObjects)
@@ -43,6 +43,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.IsTrue(hasMovementClip, "Basic movement animation included in animator");
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -63,6 +64,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.IsTrue(rigidBodyComponent.isKinematic, "basic enemies can move through each other (but still be able to trigger a trigger");
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -81,6 +83,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.NotNull(collider, "collider component exists");
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -115,6 +118,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.IsTrue(damaged, "damageable attacked");
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -141,15 +145,13 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             destroyList.Add(mockDamageable);
 
             yield return null;
-            yield return null;
             damageableComponent.transform.position = enemy.transform.position + new Vector3(0, 100, 0);
-            yield return null;
-            yield return null;
             yield return null;
 
             Assert.IsTrue(damageableForgotten, "damageable forgotten when not touching");
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -176,12 +178,11 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             destroyList.Add(mockAssignAttackPoint);
 
             yield return null;
-            yield return null;
-            yield return null;
 
             Assert.IsTrue(attackPointAcquired, "acquired attack point from trigger");
 
             Teardown(destroyList);
+            yield return null;
         }
     }
 }

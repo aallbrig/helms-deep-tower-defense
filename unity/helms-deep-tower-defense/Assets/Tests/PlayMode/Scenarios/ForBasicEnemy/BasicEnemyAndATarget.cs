@@ -59,6 +59,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.AreEqual(target.transform.position, recordedPosition);
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -74,6 +75,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             Assert.IsTrue(enemy.transform.forward.normalized == (target.transform.position - enemy.transform.position).normalized);
 
             Teardown(destroyList);
+            yield return null;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Tests.PlayMode.Scenarios.ForCastle
 {
     public class CastleFacts
     {
-        private readonly TestCamera _testCameraSpawner = new TestCamera(new Vector3(0, 10, -10));
+        private readonly TestCameraSpawner _testCameraSpawner = new TestCameraSpawner(new Vector3(0, 10, -10));
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Castle");
 
         private void Teardown(List<GameObject> gameObjects)
@@ -36,6 +36,7 @@ namespace Tests.PlayMode.Scenarios.ForCastle
             Assert.NotNull(castleComponent, "component exists");
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -54,6 +55,7 @@ namespace Tests.PlayMode.Scenarios.ForCastle
             Assert.NotNull(component.isTrigger, "collider is a trigger");
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -75,6 +77,7 @@ namespace Tests.PlayMode.Scenarios.ForCastle
             Assert.IsTrue(damaged);
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -96,6 +99,7 @@ namespace Tests.PlayMode.Scenarios.ForCastle
             Assert.IsTrue(killed);
 
             Teardown(destroyList);
+            yield return null;
         }
 
         [UnityTest]
@@ -113,6 +117,8 @@ namespace Tests.PlayMode.Scenarios.ForCastle
             var attackPointTransform = component.AssignAttackPoint();
             
             Assert.NotNull(attackPointTransform);
+            Teardown(destroyList);
+            yield return null;
         }
     }
 }
