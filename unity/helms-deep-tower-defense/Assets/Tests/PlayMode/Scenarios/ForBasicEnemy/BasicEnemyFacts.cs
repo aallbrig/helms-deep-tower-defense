@@ -14,6 +14,26 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
     {
         private readonly TestCameraSpawner _testCameraSpawner = new TestCameraSpawner(new Vector3(0, 10, -10));
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Basic Enemy");
+        // var destroyList = new List<GameObject>();
+
+        [SetUp]
+        public void Setup()
+        {
+            Debug.Log("Setup run");
+            // var enemy = _prefabSpawner.Spawn();
+            // destroyList.Add(enemy);
+            // var testCamera = _testCameraSpawner.Spawn();
+            // destroyList.Add(testCamera);
+            // testCamera.transform.LookAt(enemy.transform);
+        }
+        [TearDown]
+        public void Teardown()
+        {
+            Debug.Log("Teardown run");
+            // for (int i = gameObjects.Count - 1; i >= 0; i--)
+            //     Object.Destroy(gameObjects[i]);
+            // gameObjects.Clear();
+        }
 
         private void Teardown(List<GameObject> gameObjects)
         {

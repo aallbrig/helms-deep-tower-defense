@@ -7,12 +7,11 @@ using Random = UnityEngine.Random;
 
 namespace MonoBehaviours
 {
-    public class Castle : MonoBehaviour, IDamageable, IKillable, IHaveHealth, IAssignAttackPoints
+    public class Castle : MonoBehaviour, IDamageable, IKillable, IHaveHealth
     {
-        // Gotta work around limitations of [SerializeReference]
+        // Gotta work around limitations of [SerializeReference], meaning I can't just use interfaces
         public HealthSlider slider;
         public float maxHealth = 100f;
-        public List<Transform> attackPoints = new List<Transform>();
         private float _currentHealth;
 
         private void Awake()
@@ -27,7 +26,6 @@ namespace MonoBehaviours
 
         private void Start()
         {
-            if (attackPoints.Count == 0) attackPoints.Add(transform);
             Killed += () => gameObject.SetActive(false);
         }
 
@@ -47,9 +45,5 @@ namespace MonoBehaviours
             Killed?.Invoke();
         }
         public float CurrentHealthNormalized() => _currentHealth / maxHealth;
-        public Transform AssignAttackPoint()
-        {
-            return attackPoints[Random.Range(0, attackPoints.Count)];
-        }
     }
 }
