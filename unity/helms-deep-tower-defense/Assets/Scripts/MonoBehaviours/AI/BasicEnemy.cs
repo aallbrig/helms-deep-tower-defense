@@ -183,7 +183,6 @@ namespace MonoBehaviours.AI
             if (debugEnabled) Debug.Log($"<BasicEnemy> | {logMessage}");
         }
 
-
         public bool HasDamageable()
         {
             DebugLog($"HasDamageable | damageable reference exists? {_damageable != null}");

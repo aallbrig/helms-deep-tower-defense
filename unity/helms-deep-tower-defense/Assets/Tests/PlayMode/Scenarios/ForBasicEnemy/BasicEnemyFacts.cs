@@ -145,11 +145,13 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             damageableComponent.transform.position = enemy.transform.position + new Vector3(0, 100, 0);
             yield return null;
             yield return null;
+            yield return null;
 
             Assert.IsTrue(damageableForgotten, "damageable forgotten when not touching");
 
             Teardown(destroyList);
         }
+
         [UnityTest]
         public IEnumerator BasicEnemy_UsesA_AssignAttackPoint_OnTriggerEnter()
         {
@@ -173,6 +175,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             collider.isTrigger = true;
             destroyList.Add(mockAssignAttackPoint);
 
+            yield return null;
             yield return null;
             yield return null;
 
