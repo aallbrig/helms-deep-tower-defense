@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Model.Combat;
 using MonoBehaviours.Combat;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace MonoBehaviours
 {

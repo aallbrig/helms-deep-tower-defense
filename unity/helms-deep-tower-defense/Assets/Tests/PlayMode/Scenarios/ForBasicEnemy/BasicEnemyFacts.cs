@@ -83,8 +83,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             collider.isTrigger = true;
             CleanupAtEnd(mockDamageable);
 
-            yield return null;
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
 
             Assert.IsTrue(damageableDiscovered, "damageable discovered");
             Assert.IsTrue(damaged, "damageable attacked");
@@ -109,10 +108,10 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             collider.size = new Vector3(3, 3, 3);
             collider.isTrigger = true;
             CleanupAtEnd(mockDamageable);
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
 
             mockDamageable.transform.position = enemy.transform.position + new Vector3(0, 0, 100);
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
 
             Assert.IsTrue(damageableForgotten, "damageable forgotten when not touching");
         }
