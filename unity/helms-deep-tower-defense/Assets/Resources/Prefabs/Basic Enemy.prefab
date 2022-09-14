@@ -158,9 +158,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2879866509834691327}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0af03eecb340eb240abc88e883024e11, type: 3}
+  m_Script: {fileID: 11500000, guid: b7596266f1026274ebf69d985ef1a648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 14cf719268ebb774fbc0c5f322e057ab, type: 2}
+  currentPath: {fileID: 0}
+  theTarget: {fileID: 0}
+  debugEnabled: 0
 --- !u!95 &970451316161749781
 Animator:
   serializedVersion: 3
