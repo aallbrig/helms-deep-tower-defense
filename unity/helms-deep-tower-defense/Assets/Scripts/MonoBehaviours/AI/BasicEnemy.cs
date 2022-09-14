@@ -116,7 +116,7 @@ namespace MonoBehaviours.AI
 
         private void OnTriggerExit(Collider other)
         {
-            if (_damageable == null) return;
+            if (_damageable == null && _attackPoint == null) return;
 
             if (other.TryGetComponent<IDamageable>(out var damageable))
             {

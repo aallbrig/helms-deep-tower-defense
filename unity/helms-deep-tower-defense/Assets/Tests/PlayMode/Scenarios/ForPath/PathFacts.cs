@@ -7,9 +7,8 @@ using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.Scenarios.ForPath
 {
-    public class PathFacts
+    public class PathFacts: ScenarioTest
     {
-        private readonly TestCameraSpawner _testCameraSpawner = new TestCameraSpawner(new Vector3(0, 10, -10));
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Path");
     }
 }

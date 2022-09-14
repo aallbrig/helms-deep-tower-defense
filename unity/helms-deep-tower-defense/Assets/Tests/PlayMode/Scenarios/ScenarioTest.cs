@@ -25,9 +25,9 @@ namespace Tests.PlayMode.Scenarios
         [SetUp]
         protected void SetUp()
         {
-            Debug.Log("ScenarioTest | initializing brand new destroy list, for pure test");
+            Debug.Log("ScenarioTest | SetUp | initializing brand new destroy list, for pure test");
             _destroyAfterEachTest = new List<GameObject>();
-            Debug.Log("ScenarioTest | creating test camera");
+            Debug.Log("ScenarioTest | SetUp | creating test camera");
             _testCamera = _testCameraSpawner.Spawn();
             _destroyAfterEachTest.Add(_testCamera);
         }
@@ -35,10 +35,9 @@ namespace Tests.PlayMode.Scenarios
         [TearDown]
         protected void TearDown()
         {
-            Debug.Log("ScenarioTest | destroying all game objects in destroy list");
+            Debug.Log("ScenarioTest | TearDown | destroying all game objects in destroy list");
             for (int i = _destroyAfterEachTest.Count - 1; i >= 0; i--)
                 Object.Destroy(_destroyAfterEachTest[i]);
-            _destroyAfterEachTest.Clear();
             _destroyAfterEachTest.Clear();
         }
     }
