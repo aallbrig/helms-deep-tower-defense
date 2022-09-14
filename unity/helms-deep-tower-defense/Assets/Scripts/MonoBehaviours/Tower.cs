@@ -1,11 +1,12 @@
 ﻿using System;
 using Model.Combat;
+using MonoBehaviours.Combat;
 using ScriptableObjects;
 using UnityEngine;
 
 namespace MonoBehaviours
 {
-    public class Tower : MonoBehaviour, IAssignAttackPoints, IDamageable, IKillable, ITowerConfig
+    public class Tower : MonoBehaviour, IDamageable, IKillable, ITowerConfig
     {
         public TowerConfig towerConf;
         private float _currentHealth;
@@ -15,10 +16,6 @@ namespace MonoBehaviours
             towerConf ??= ScriptableObject.CreateInstance<TowerConfig>();
             _currentHealth = towerConf.MaxHealth;
             Killed += () => gameObject.SetActive(false);
-        }
-        public Transform AssignAttackPoint()
-        {
-            return transform;
         }
 
         public event Action<float> Damaged;
@@ -44,7 +41,6 @@ namespace MonoBehaviours
         }
 
         public float MaxHealth => towerConf.MaxHealth;
-
         public float Range => towerConf.Range;
     }
 }

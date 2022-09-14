@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MonoBehaviours.AI
 {
-    public class BasicEnemy : MonoBehaviour, IFollowPath
+    public class BasicEnemy : MonoBehaviour, IFollowPath, IDamageable
     {
         public event Action<Transform> NewTargetAcquired;
         public event Action<Vector3> MovedTowardsPosition;
@@ -202,6 +202,13 @@ namespace MonoBehaviours.AI
             DamageableAttacked?.Invoke(_damageable);
             _lastAttackTime = Time.time;
             return TaskStatus.Success;
+        }
+
+        public event Action<float> Damaged;
+
+        public void Damage(float damage)
+        {
+            DebugLog($"Damage | receive damage {damage}");
         }
     }
 }
