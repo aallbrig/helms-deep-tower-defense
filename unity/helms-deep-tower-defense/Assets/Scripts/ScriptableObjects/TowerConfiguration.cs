@@ -9,6 +9,7 @@ namespace ScriptableObjects
     public interface ITowerConfig
     {
         public float MaxHealth { get; }
+
         public float Range { get; }
     }
 
@@ -17,10 +18,10 @@ namespace ScriptableObjects
     {
         public float maxHealth = 3.0f;
         public float range = 5.0f;
-        public float timeBetweenAttacks = 1.2f;
-
-        public float MaxHealth => maxHealth;
-        public float Range => range;
+        public float damage = 0.5f;
+        public float senseDelay = 0.4f;
+        public float attackDelay = 1.1f;
+        public GameObject projectilePrefab;
 
         public BehaviorTree BuildBehaviorTree(GameObject context)
         {
@@ -30,15 +31,21 @@ namespace ScriptableObjects
             // otherwise, if the enemy has a target to go to, go to target
             var attackTargetSequence = new BehaviorTreeBuilder(context)
                 .Sequence()
-                    .Condition(tower.HasTarget)
-                    .Do(tower.AttackTarget)
-                    .WaitTime(timeBetweenAttacks)
+                .Condition(tower.CanSenseTargets)
+                .Do(tower.SenseForTargets)
+                .Condition(tower.HasTarget)
+                .Condition(tower.CanAttackTarget)
+                .Do(tower.AttackTarget)
                 .End();
             return new BehaviorTreeBuilder(context)
                 .Selector()
-                    .Splice(attackTargetSequence.Build())
+                .Splice(attackTargetSequence.Build())
                 .End()
                 .Build();
         }
+
+        public float MaxHealth => maxHealth;
+
+        public float Range => range;
     }
 }

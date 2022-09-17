@@ -12,25 +12,38 @@ namespace MonoBehaviours
     {
         public LayerMask layerMaskFilter;
         public TowerConfiguration config;
-        public AttackRange attackRange;
+        public Transform firePoint;
+        [SerializeField] private BehaviorTree behaviorTree;
+        private Collider[] _collidersWithinRange;
         private float _currentHealth;
-        private BehaviorTree _behaviorTree;
+        private float _lastAttackTime;
+        private float _lastSenseTime;
 
         private void Awake()
         {
             config ??= ScriptableObject.CreateInstance<TowerConfiguration>();
             _currentHealth = MaxHealth;
-            _behaviorTree = config.BuildBehaviorTree(gameObject);
+            behaviorTree = config.BuildBehaviorTree(gameObject);
         }
 
-        private void Start()
-        {
-            Killed += () => gameObject.SetActive(false);
-        }
+        private void Update() => behaviorTree.Tick();
 
-        private void Update()
+        private void OnEnable()
         {
-            _behaviorTree.Tick();
+            _lastSenseTime = Time.time - config.senseDelay;
+            _lastAttackTime = Time.time - config.attackDelay;
+            Killed += OnKilled;
+        }
+        private void OnDisable() => Killed -= OnKilled;
+
+        public event Action<GameObject> AttackedTarget;
+
+        public void Attack(GameObject target)
+        {
+            var projectile = Instantiate(config.projectilePrefab, firePoint.position, firePoint.rotation);
+            var projectileComponent = projectile.GetComponent<Projectile>();
+            projectileComponent.layerMaskFilter = layerMaskFilter;
+            AttackedTarget?.Invoke(target);
         }
 
         public event Action<float> Damaged;
@@ -48,37 +61,31 @@ namespace MonoBehaviours
             }
         }
 
+        public float CurrentHealthNormalized() => _currentHealth / MaxHealth;
+
         public event Action Killed;
 
-        public void Kill()
-        {
-            Killed?.Invoke();
-        }
+        public void Kill() => Killed?.Invoke();
 
         public float MaxHealth => config.MaxHealth;
+
         public float Range => config.Range;
 
-        public event Action<GameObject> AttackedTarget;
-
-        public void Attack(GameObject target)
+        private void OnKilled() => gameObject.SetActive(false);
+        public TaskStatus SenseForTargets()
         {
-            if (target.TryGetComponent<IDamageable>(out var damageable))
-            {
-                AttackedTarget?.Invoke(target);
-            }
-        }
-
-        public float CurrentHealthNormalized() => _currentHealth / MaxHealth;
-        public bool HasTarget()
-        {
-            var colliders = Physics.OverlapSphere(transform.position, 3f, layerMaskFilter);
-            return colliders.Length > 0;
+            _lastSenseTime = Time.time;
+            _collidersWithinRange = Physics.OverlapSphere(transform.position, config.range, layerMaskFilter);
+            return TaskStatus.Success;
         }
         public TaskStatus AttackTarget()
         {
-            var colliders = Physics.OverlapSphere(transform.position, 3f, layerMaskFilter);
-            Attack(colliders[0].gameObject);
+            _lastAttackTime = Time.time;
+            Attack(_collidersWithinRange[0].gameObject);
             return TaskStatus.Success;
         }
+        public bool HasTarget() => _collidersWithinRange.Length > 0;
+        public bool CanSenseTargets() => Time.time - _lastSenseTime >= config.senseDelay;
+        public bool CanAttackTarget() => Time.time - _lastAttackTime >= config.attackDelay;
     }
 }

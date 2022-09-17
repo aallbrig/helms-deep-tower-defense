@@ -537,6 +537,7 @@ Transform:
   m_Children:
   - {fileID: 2691920854936694237}
   - {fileID: 6178440814440992747}
+  - {fileID: 8270081396281047872}
   m_Father: {fileID: 3288461948968905711}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -593,7 +594,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   config: {fileID: 11400000, guid: 777c0cf43648df64f96cfe18a55e1bdc, type: 2}
-  attackRange: {fileID: 1203622964520031899}
+  firePoint: {fileID: 8270081396281047872}
 --- !u!135 &8242692114043458408
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -621,6 +622,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerFrom: {fileID: 3872336328095749166}
   applyTo: {fileID: 7411855855563759998}
+--- !u!1 &5679751987939886726
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8270081396281047872}
+  m_Layer: 7
+  m_Name: Fire Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8270081396281047872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5679751987939886726}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.551}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7411855855563759998}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6377337793492317352
 GameObject:
   m_ObjectHideFlags: 0

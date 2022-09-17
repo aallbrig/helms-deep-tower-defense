@@ -1,8 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using Model.Combat;
 using Model.Factories;
-using Model.Factories.Camera;
 using MonoBehaviours;
 using NUnit.Framework;
 using ScriptableObjects;
@@ -11,10 +8,10 @@ using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.Scenarios.ForTowers
 {
-    public class TowerFacts: ScenarioTest
+    public class TowerFacts : ScenarioTest
     {
-        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Tower");
         private readonly PrefabSpawner _dummyTowerTargetSpawner = new PrefabSpawner("Prefabs/Dummy Tower Target");
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Tower");
 
         [UnityTest]
         public IEnumerator Tower_UsesA_TowerComponent()
@@ -91,7 +88,6 @@ namespace Tests.PlayMode.Scenarios.ForTowers
             yield return new WaitForSeconds(0.2f);
 
             Assert.IsTrue(attackedTarget, "tower did not invoke an 'target attacked' event");
-            // Assert.IsTrue(targetReceivedDamage);
         }
     }
 }
