@@ -1,13 +1,10 @@
 ﻿using CleverCrow.Fluid.BTs.Trees;
+using Model.AI;
 using MonoBehaviours.AI;
 using UnityEngine;
 
 namespace ScriptableObjects
 {
-    public interface IBehaviorTreeBuilder<in T>
-    {
-        public BehaviorTree BuildBehaviorTree(T context);
-    }
 
     public interface IEnemyConfig
     {

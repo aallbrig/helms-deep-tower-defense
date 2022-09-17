@@ -75,20 +75,23 @@ namespace Tests.PlayMode.Scenarios.ForTowers
         }
 
         [UnityTest]
-        public IEnumerator Tower_CanBe_AttackDummyTargets()
+        public IEnumerator Tower_CanAttack_DummyTargets()
         {
             var tower = _prefabSpawner.Spawn();
-            var dummyTarget = _dummyTowerTargetSpawner.Spawn();
-            dummyTarget.transform.position = new Vector3(0, 0, 3);
             CleanupAtEnd(tower);
             TestCameraLookAt(tower.transform);
             var towerComponent = tower.GetComponent<Tower>();
             var attackedTarget = false;
             towerComponent.AttackedTarget += target => attackedTarget = true;
+
+            var dummyTarget = _dummyTowerTargetSpawner.Spawn();
+            dummyTarget.transform.position = new Vector3(1, 0, 1);
+            CleanupAtEnd(dummyTarget);
             yield return null;
             yield return new WaitForSeconds(0.2f);
 
-            Assert.IsTrue(attackedTarget);
+            Assert.IsTrue(attackedTarget, "tower did not invoke an 'target attacked' event");
+            // Assert.IsTrue(targetReceivedDamage);
         }
     }
 }

@@ -10,15 +10,16 @@ namespace MonoBehaviours.Combat
     {
         public event Action<GameObject> TriggerEntered;
         public event Action<GameObject> TriggerExited;
-        private List<GameObject> _trackedTargets = new List<GameObject>();
+        public LayerMask layerMaskFilter;
+        public List<GameObject> trackedTargets = new List<GameObject>();
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<IDamageable>(out var damageable))
+            if (IsInLayerMaskFilter(other) && other.TryGetComponent<IDamageable>(out var damageable))
             {
-                if (!_trackedTargets.Contains(other.gameObject))
+                if (!trackedTargets.Contains(other.gameObject))
                 {
-                    _trackedTargets.Add(other.gameObject);
+                    trackedTargets.Add(other.gameObject);
                     TriggerEntered?.Invoke(other.gameObject);
                 }
             }
@@ -26,14 +27,16 @@ namespace MonoBehaviours.Combat
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.TryGetComponent<IDamageable>(out var damageable))
+            if (IsInLayerMaskFilter(other) && other.TryGetComponent<IDamageable>(out var damageable))
             {
-                if (_trackedTargets.Contains(other.gameObject))
+                if (trackedTargets.Contains(other.gameObject))
                 {
-                    _trackedTargets.Remove(other.gameObject);
+                    trackedTargets.Remove(other.gameObject);
                     TriggerExited?.Invoke(other.gameObject);
                 }
             }
         }
+
+        private bool IsInLayerMaskFilter(Collider other) => layerMaskFilter == (layerMaskFilter | (1 << other.gameObject.layer));
     }
 }

@@ -43,7 +43,7 @@ namespace MonoBehaviours.AI
             }
         }
 
-        private BehaviorTree _tree;
+        private BehaviorTree _behaviorTree;
         private float _lastAttackTime;
         private Transform _attackPoint;
         private float _currentHealth;
@@ -51,7 +51,7 @@ namespace MonoBehaviours.AI
         private void Awake()
         {
             config ??= ScriptableObject.CreateInstance<EnemyConfiguration>();
-            _tree = config.BuildBehaviorTree(gameObject);
+            _behaviorTree = config.BuildBehaviorTree(gameObject);
             _lastAttackTime = Time.time - config.AttackDelay;
             path = currentPath;
             NewTargetAcquired += newTarget => transform.LookAt(newTarget);
@@ -88,7 +88,7 @@ namespace MonoBehaviours.AI
 
         private void Update()
         {
-            _tree.Tick();
+            _behaviorTree.Tick();
         }
 
         private void OnTriggerEnter(Collider other)

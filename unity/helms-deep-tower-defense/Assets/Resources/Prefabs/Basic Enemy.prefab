@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 866684527}
   - component: {fileID: 866684530}
   - component: {fileID: 866684529}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 8794385436630791619}
   - component: {fileID: 8873908862577625727}
   - component: {fileID: 1619174530768488585}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 898406735751524875}
   - component: {fileID: 970451316161749781}
   - component: {fileID: 3009119503786221139}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Basic Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,6 +232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 14cf719268ebb774fbc0c5f322e057ab, type: 2}
   currentPath: {fileID: 0}
+  maxHealth: 3
   theTarget: {fileID: 0}
   debugEnabled: 0
 --- !u!54 &413397341587589415
@@ -264,6 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 14cf719268ebb774fbc0c5f322e057ab, type: 2}
   currentPath: {fileID: 0}
+  maxHealth: 3
   theTarget: {fileID: 0}
   debugEnabled: 0
 --- !u!95 &970451316161749781
@@ -305,6 +307,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 105635194378162156}
     m_Modifications:
+    - target: {fileID: 175655152801635228, guid: 50070ca2227114244aafd712fee1a817, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3827220359492956702, guid: 50070ca2227114244aafd712fee1a817, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -409,9 +415,21 @@ PrefabInstance:
       propertyPath: trackTarget
       value: 
       objectReference: {fileID: 2879866509834691327}
+    - target: {fileID: 6246710498797220556, guid: 50070ca2227114244aafd712fee1a817, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6363205333186771476, guid: 50070ca2227114244aafd712fee1a817, type: 3}
       propertyPath: m_Name
       value: World Space Health
+      objectReference: {fileID: 0}
+    - target: {fileID: 6363205333186771476, guid: 50070ca2227114244aafd712fee1a817, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856239057179279378, guid: 50070ca2227114244aafd712fee1a817, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50070ca2227114244aafd712fee1a817, type: 3}

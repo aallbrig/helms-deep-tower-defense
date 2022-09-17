@@ -1,5 +1,8 @@
 ﻿using System;
+using CleverCrow.Fluid.BTs.Tasks;
+using CleverCrow.Fluid.BTs.Trees;
 using Model.Combat;
+using MonoBehaviours.Combat;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -7,17 +10,27 @@ namespace MonoBehaviours
 {
     public class Tower : MonoBehaviour, IDamageable, IKillable, ITowerConfig, IAttack, IHaveHealth
     {
-        public TowerConfig towerConf;
+        public LayerMask layerMaskFilter;
+        public TowerConfiguration config;
+        public AttackRange attackRange;
         private float _currentHealth;
+        private BehaviorTree _behaviorTree;
 
         private void Awake()
         {
-            towerConf ??= ScriptableObject.CreateInstance<TowerConfig>();
+            config ??= ScriptableObject.CreateInstance<TowerConfiguration>();
             _currentHealth = MaxHealth;
+            _behaviorTree = config.BuildBehaviorTree(gameObject);
         }
+
         private void Start()
         {
             Killed += () => gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            _behaviorTree.Tick();
         }
 
         public event Action<float> Damaged;
@@ -42,8 +55,8 @@ namespace MonoBehaviours
             Killed?.Invoke();
         }
 
-        public float MaxHealth => towerConf.MaxHealth;
-        public float Range => towerConf.Range;
+        public float MaxHealth => config.MaxHealth;
+        public float Range => config.Range;
 
         public event Action<GameObject> AttackedTarget;
 
@@ -54,6 +67,18 @@ namespace MonoBehaviours
                 AttackedTarget?.Invoke(target);
             }
         }
+
         public float CurrentHealthNormalized() => _currentHealth / MaxHealth;
+        public bool HasTarget()
+        {
+            var colliders = Physics.OverlapSphere(transform.position, 3f, layerMaskFilter);
+            return colliders.Length > 0;
+        }
+        public TaskStatus AttackTarget()
+        {
+            var colliders = Physics.OverlapSphere(transform.position, 3f, layerMaskFilter);
+            Attack(colliders[0].gameObject);
+            return TaskStatus.Success;
+        }
     }
 }
