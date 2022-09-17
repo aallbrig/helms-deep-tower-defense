@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MonoBehaviours.AI
 {
-    public class BasicEnemy : MonoBehaviour, IFollowPath, IDamageable
+    public class BasicEnemy : MonoBehaviour, IFollowPath, IDamageable, IHaveHealth
     {
         public event Action<Transform> NewTargetAcquired;
         public event Action<Vector3> MovedTowardsPosition;
@@ -23,6 +23,7 @@ namespace MonoBehaviours.AI
         public EnemyConfiguration config;
         public Path path { get => currentPath; set => currentPath = value; }
         public Path currentPath;
+        public float maxHealth = 3f;
         private int _currentPathPointIndex = 0;
         public Transform theTarget;
         public bool debugEnabled = false;
@@ -45,6 +46,7 @@ namespace MonoBehaviours.AI
         private BehaviorTree _tree;
         private float _lastAttackTime;
         private Transform _attackPoint;
+        private float _currentHealth;
 
         private void Awake()
         {
@@ -53,6 +55,7 @@ namespace MonoBehaviours.AI
             _lastAttackTime = Time.time - config.AttackDelay;
             path = currentPath;
             NewTargetAcquired += newTarget => transform.LookAt(newTarget);
+            _currentHealth = maxHealth;
         }
 
         public TaskStatus MoveToTarget()
@@ -210,5 +213,6 @@ namespace MonoBehaviours.AI
         {
             DebugLog($"Damage | receive damage {damage}");
         }
+        public float CurrentHealthNormalized() => _currentHealth / maxHealth;
     }
 }

@@ -14,6 +14,7 @@ namespace Tests.PlayMode.Scenarios.ForTowers
     public class TowerFacts: ScenarioTest
     {
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Tower");
+        private readonly PrefabSpawner _dummyTowerTargetSpawner = new PrefabSpawner("Prefabs/Dummy Tower Target");
 
         [UnityTest]
         public IEnumerator Tower_UsesA_TowerComponent()
@@ -71,6 +72,23 @@ namespace Tests.PlayMode.Scenarios.ForTowers
             towerComponent.Damage(configFacade.MaxHealth);
 
             Assert.IsTrue(killed);
+        }
+
+        [UnityTest]
+        public IEnumerator Tower_CanBe_AttackDummyTargets()
+        {
+            var tower = _prefabSpawner.Spawn();
+            var dummyTarget = _dummyTowerTargetSpawner.Spawn();
+            dummyTarget.transform.position = new Vector3(0, 0, 3);
+            CleanupAtEnd(tower);
+            TestCameraLookAt(tower.transform);
+            var towerComponent = tower.GetComponent<Tower>();
+            var attackedTarget = false;
+            towerComponent.AttackedTarget += target => attackedTarget = true;
+            yield return null;
+            yield return new WaitForSeconds(0.2f);
+
+            Assert.IsTrue(attackedTarget);
         }
     }
 }

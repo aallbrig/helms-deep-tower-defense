@@ -1,20 +1,22 @@
 ﻿using System;
 using Model.Combat;
-using MonoBehaviours.Combat;
 using ScriptableObjects;
 using UnityEngine;
 
 namespace MonoBehaviours
 {
-    public class Tower : MonoBehaviour, IDamageable, IKillable, ITowerConfig
+    public class Tower : MonoBehaviour, IDamageable, IKillable, ITowerConfig, IAttack, IHaveHealth
     {
         public TowerConfig towerConf;
         private float _currentHealth;
 
-        private void Start()
+        private void Awake()
         {
             towerConf ??= ScriptableObject.CreateInstance<TowerConfig>();
-            _currentHealth = towerConf.MaxHealth;
+            _currentHealth = MaxHealth;
+        }
+        private void Start()
+        {
             Killed += () => gameObject.SetActive(false);
         }
 
@@ -42,5 +44,16 @@ namespace MonoBehaviours
 
         public float MaxHealth => towerConf.MaxHealth;
         public float Range => towerConf.Range;
+
+        public event Action<GameObject> AttackedTarget;
+
+        public void Attack(GameObject target)
+        {
+            if (target.TryGetComponent<IDamageable>(out var damageable))
+            {
+                AttackedTarget?.Invoke(target);
+            }
+        }
+        public float CurrentHealthNormalized() => _currentHealth / MaxHealth;
     }
 }
