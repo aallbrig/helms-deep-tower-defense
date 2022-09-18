@@ -33,7 +33,9 @@ namespace ScriptableObjects
                 .Sequence()
                 .Condition(tower.CanSenseTargets)
                 .Do(tower.SenseForTargets)
-                .Condition(tower.HasTarget)
+                .Condition(tower.HasTargets)
+                .Do(tower.FindClosestTarget)
+                .Do(tower.LookAtClosestTarget)
                 .Condition(tower.CanAttackTarget)
                 .Do(tower.AttackTarget)
                 .End();

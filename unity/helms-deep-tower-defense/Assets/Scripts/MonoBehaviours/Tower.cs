@@ -13,9 +13,11 @@ namespace MonoBehaviours
         public LayerMask layerMaskFilter;
         public TowerConfiguration config;
         public Transform firePoint;
+        public Transform turret;
         [SerializeField] private BehaviorTree behaviorTree;
         private Collider[] _collidersWithinRange;
         private float _currentHealth;
+        private GameObject _currentTarget;
         private float _lastAttackTime;
         private float _lastSenseTime;
 
@@ -86,6 +88,19 @@ namespace MonoBehaviours
             Attack(nearestTarget);
             return TaskStatus.Success;
         }
+        public TaskStatus FindClosestTarget()
+        {
+            var closestTarget = FindNearestTarget(_collidersWithinRange);
+            if (closestTarget == null) return TaskStatus.Failure;
+            _currentTarget = closestTarget;
+            return TaskStatus.Success;
+        }
+        public TaskStatus LookAtClosestTarget()
+        {
+            if (_currentTarget == null) return TaskStatus.Failure;
+            turret.LookAt(_currentTarget.transform);
+            return TaskStatus.Success;
+        }
         private GameObject FindNearestTarget(Collider[] collidersWithinRange)
         {
             var minDistance = config.range + 1f;
@@ -101,7 +116,7 @@ namespace MonoBehaviours
             }
             return nearestEnemy;
         }
-        public bool HasTarget() => _collidersWithinRange.Length > 0;
+        public bool HasTargets() => _collidersWithinRange.Length > 0;
         public bool CanSenseTargets() => Time.time - _lastSenseTime >= config.senseDelay;
         public bool CanAttackTarget() => Time.time - _lastAttackTime >= config.attackDelay;
     }

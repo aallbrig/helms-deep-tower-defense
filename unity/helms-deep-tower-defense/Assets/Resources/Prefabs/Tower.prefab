@@ -552,7 +552,6 @@ GameObject:
   - component: {fileID: 5489489753528983020}
   - component: {fileID: 6287663571915273346}
   - component: {fileID: 8242692114043458408}
-  - component: {fileID: 8315700663035197643}
   m_Layer: 7
   m_Name: Tower
   m_TagString: Untagged
@@ -595,6 +594,7 @@ MonoBehaviour:
     m_Bits: 64
   config: {fileID: 11400000, guid: 777c0cf43648df64f96cfe18a55e1bdc, type: 2}
   firePoint: {fileID: 8270081396281047872}
+  turret: {fileID: 7411855855563759998}
 --- !u!135 &8242692114043458408
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -608,20 +608,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.85
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8315700663035197643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5489489753528983011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3055b94e04744d5ea747bed474e6e041, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  triggerFrom: {fileID: 3872336328095749166}
-  applyTo: {fileID: 7411855855563759998}
 --- !u!1 &5679751987939886726
 GameObject:
   m_ObjectHideFlags: 0
