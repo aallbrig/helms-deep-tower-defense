@@ -20,9 +20,7 @@ namespace MonoBehaviours.UI
                 _damageable.Damaged += _ => RenderCurrentHealth();
             }
             if (targetGameObject.TryGetComponent<IHaveHealth>(out var healthHaver))
-            {
                 _healthHaver = healthHaver;
-            }
             RenderCurrentHealth();
         }
         private void RenderCurrentHealth()

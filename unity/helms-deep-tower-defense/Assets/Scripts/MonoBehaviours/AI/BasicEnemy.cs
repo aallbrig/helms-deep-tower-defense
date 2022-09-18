@@ -8,26 +8,21 @@ using UnityEngine;
 
 namespace MonoBehaviours.AI
 {
-    public class BasicEnemy : MonoBehaviour, IFollowPath, IDamageable, IHaveHealth
+    public class BasicEnemy : MonoBehaviour, IFollowPath, IDamageable, IHaveHealth, IKillable
     {
-        public event Action<Transform> NewTargetAcquired;
-        public event Action<Vector3> MovedTowardsPosition;
-        public event Action<GameObject> ReachedPoint;
-        public event Action<IDamageable> ForgotDamageable;
-        public event Action<IDamageable> DiscoveredDamageable;
-        public event Action<Transform> AttackPointAcquired;
-        public event Action<IDamageable> DamageableAttacked;
-        public event Action<Path> ForgotPath;
-        public event Action<Transform> ForgotTarget;
 
         public EnemyConfiguration config;
-        public Path path { get => currentPath; set => currentPath = value; }
         public Path currentPath;
         public float maxHealth = 3f;
-        private int _currentPathPointIndex = 0;
         public Transform theTarget;
-        public bool debugEnabled = false;
+        public bool debugEnabled;
+        private Transform _attackPoint;
+
+        private BehaviorTree _behaviorTree;
+        private float _currentHealth;
+        private int _currentPathPointIndex;
         private IDamageable _damageable;
+        private float _lastAttackTime;
 
         public Transform Target
         {
@@ -43,11 +38,6 @@ namespace MonoBehaviours.AI
             }
         }
 
-        private BehaviorTree _behaviorTree;
-        private float _lastAttackTime;
-        private Transform _attackPoint;
-        private float _currentHealth;
-
         private void Awake()
         {
             config ??= ScriptableObject.CreateInstance<EnemyConfiguration>();
@@ -57,6 +47,83 @@ namespace MonoBehaviours.AI
             NewTargetAcquired += newTarget => transform.LookAt(newTarget);
             _currentHealth = maxHealth;
         }
+
+        private void Update() => _behaviorTree.Tick();
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (_damageable != null) return;
+
+            if (_damageable == null && other.TryGetComponent<IDamageable>(out var damageable))
+            {
+                _damageable = damageable;
+                DiscoveredDamageable?.Invoke(_damageable);
+            }
+            if (_attackPoint == null && other.TryGetComponent<IAssignAttackPoints>(out var attackPointAssigner))
+            {
+                var attackPoint = attackPointAssigner.AssignAttackPoint();
+                _attackPoint = attackPoint;
+                ForgetPath();
+                ForgetTarget();
+                Target = _attackPoint;
+                AttackPointAcquired?.Invoke(_attackPoint);
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (_damageable == null && _attackPoint == null) return;
+
+            if (other.TryGetComponent<IDamageable>(out var damageable))
+                if (_damageable == damageable)
+                {
+                    _damageable = null;
+                    ForgotDamageable?.Invoke(damageable);
+                }
+        }
+
+        public event Action<float> Damaged;
+
+        public void Damage(float damage)
+        {
+            _currentHealth -= damage;
+            Damaged?.Invoke(damage);
+            if (_currentHealth <= 0) Kill();
+        }
+
+        public Path path
+        {
+            get => currentPath;
+            set => currentPath = value;
+        }
+
+        public float CurrentHealthNormalized() => _currentHealth / maxHealth;
+
+        public event Action Killed;
+
+        public void Kill()
+        {
+            Killed?.Invoke();
+            Destroy(gameObject);
+        }
+
+        public event Action<Transform> NewTargetAcquired;
+
+        public event Action<Vector3> MovedTowardsPosition;
+
+        public event Action<GameObject> ReachedPoint;
+
+        public event Action<IDamageable> ForgotDamageable;
+
+        public event Action<IDamageable> DiscoveredDamageable;
+
+        public event Action<Transform> AttackPointAcquired;
+
+        public event Action<IDamageable> DamageableAttacked;
+
+        public event Action<Path> ForgotPath;
+
+        public event Action<Transform> ForgotTarget;
 
         public TaskStatus MoveToTarget()
         {
@@ -86,49 +153,10 @@ namespace MonoBehaviours.AI
             return Target != null;
         }
 
-        private void Update()
-        {
-            _behaviorTree.Tick();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (_damageable != null) return;
-
-            if (_damageable == null && other.TryGetComponent<IDamageable>(out var damageable))
-            {
-                _damageable = damageable;
-                DiscoveredDamageable?.Invoke(_damageable);
-            }
-            if (_attackPoint == null && other.TryGetComponent<IAssignAttackPoints>(out var attackPointAssigner))
-            {
-                var attackPoint = attackPointAssigner.AssignAttackPoint();
-                _attackPoint = attackPoint;
-                ForgetPath();
-                ForgetTarget();
-                Target = _attackPoint;
-                AttackPointAcquired?.Invoke(_attackPoint);
-            }
-        }
-
         private void ForgetTarget()
         {
             ForgotTarget?.Invoke(Target);
             Target = null;
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (_damageable == null && _attackPoint == null) return;
-
-            if (other.TryGetComponent<IDamageable>(out var damageable))
-            {
-                if (_damageable == damageable)
-                {
-                    _damageable = null;
-                    ForgotDamageable?.Invoke(damageable);
-                }
-            }
         }
 
         public bool HasPath()
@@ -149,14 +177,14 @@ namespace MonoBehaviours.AI
         {
             if (path == null || path.pathPoints.Count == 0)
             {
-                DebugLog($"FollowPath | path is null or path points == 0; failure");
+                DebugLog("FollowPath | path is null or path points == 0; failure");
                 return TaskStatus.Failure;
             }
             DebugLog($"FollowPath | (# of path points {path.pathPoints.Count}, currentPointIndex {_currentPathPointIndex})");
 
             if (_currentPathPointIndex == path.pathPoints.Count)
             {
-                DebugLog($"FollowPath | successfully followed path");
+                DebugLog("FollowPath | successfully followed path");
                 // reset internal state
                 _currentPathPointIndex = 0;
                 return TaskStatus.Success;
@@ -200,19 +228,11 @@ namespace MonoBehaviours.AI
 
         public TaskStatus AttackDamageable()
         {
-            DebugLog($"AttackDamageable | Attacking damageable");
+            DebugLog("AttackDamageable | Attacking damageable");
             _damageable.Damage(config.AttackDamage);
             DamageableAttacked?.Invoke(_damageable);
             _lastAttackTime = Time.time;
             return TaskStatus.Success;
         }
-
-        public event Action<float> Damaged;
-
-        public void Damage(float damage)
-        {
-            DebugLog($"Damage | receive damage {damage}");
-        }
-        public float CurrentHealthNormalized() => _currentHealth / maxHealth;
     }
 }
