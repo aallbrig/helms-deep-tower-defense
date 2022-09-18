@@ -42,6 +42,7 @@ namespace MonoBehaviours
         {
             var projectile = Instantiate(config.projectilePrefab, firePoint.position, firePoint.rotation);
             var projectileComponent = projectile.GetComponent<Projectile>();
+            projectileComponent.DamageableCollided += damageable => damageable.Damage(config.damage);
             projectileComponent.layerMaskFilter = layerMaskFilter;
             AttackedTarget?.Invoke(target);
         }
@@ -81,8 +82,24 @@ namespace MonoBehaviours
         public TaskStatus AttackTarget()
         {
             _lastAttackTime = Time.time;
-            Attack(_collidersWithinRange[0].gameObject);
+            var nearestTarget = FindNearestTarget(_collidersWithinRange);
+            Attack(nearestTarget);
             return TaskStatus.Success;
+        }
+        private GameObject FindNearestTarget(Collider[] collidersWithinRange)
+        {
+            var minDistance = config.range + 1f;
+            GameObject nearestEnemy = null;
+            foreach (var other in collidersWithinRange)
+            {
+                var distance = Vector3.Distance(other.transform.position, transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestEnemy = other.gameObject;
+                }
+            }
+            return nearestEnemy;
         }
         public bool HasTarget() => _collidersWithinRange.Length > 0;
         public bool CanSenseTargets() => Time.time - _lastSenseTime >= config.senseDelay;

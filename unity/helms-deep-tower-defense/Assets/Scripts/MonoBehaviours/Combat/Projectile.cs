@@ -1,3 +1,5 @@
+using System;
+using Model.Combat;
 using UnityEngine;
 
 namespace MonoBehaviours.Combat
@@ -12,8 +14,16 @@ namespace MonoBehaviours.Combat
         private void OnBecameInvisible() => Destroy(gameObject);
         private void OnTriggerEnter(Collider other)
         {
-            if (!IsInLayerMask(other.gameObject, layerMaskFilter)) Destroy(gameObject);
+            if (IsInLayerMask(other.gameObject, layerMaskFilter))
+            {
+                Destroy(gameObject);
+                if (other.TryGetComponent<IDamageable>(out var damageable))
+                    DamageableCollided?.Invoke(damageable);
+            }
         }
-        private bool IsInLayerMask(GameObject other, LayerMask layerMask) => layerMask.value * (1 << other.layer) > 0;
+
+        public event Action<IDamageable> DamageableCollided;
+
+        private bool IsInLayerMask(GameObject other, LayerMask layerMask) => layerMask == (layerMask | (1 << other.layer));
     }
 }
