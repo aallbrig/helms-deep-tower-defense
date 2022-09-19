@@ -59,6 +59,7 @@ namespace Tests.PlayMode.Scenarios.ForProjectiles
         [UnityTest]
         public IEnumerator Projectile_Use_ProjectileConfiguration()
         {
+            var teamConfiguration = ScriptableObject.CreateInstance<TeamConfiguration>();
             var projectileConfiguration = ScriptableObject.CreateInstance<ProjectileConfiguration>();
             projectileConfiguration.projectileSpeed = 69f;
             var projectile = _prefabSpawner.Spawn();

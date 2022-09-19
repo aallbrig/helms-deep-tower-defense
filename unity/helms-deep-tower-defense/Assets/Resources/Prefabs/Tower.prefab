@@ -682,7 +682,6 @@ GameObject:
   - component: {fileID: 6342221162766138334}
   - component: {fileID: 8595130371644238946}
   - component: {fileID: 4665231862553728363}
-  - component: {fileID: 375691657822862755}
   m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
@@ -699,9 +698,9 @@ RectTransform:
   m_GameObject: {fileID: 7672950637783198407}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.02, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 31452950607990598}
+  - {fileID: 1132044286658281128}
   m_Father: {fileID: 5489489753528983020}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -771,19 +770,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &375691657822862755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7672950637783198407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d46ca8cbee3148138bd1ee3ca0fd979b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraPerspective: {fileID: 0}
 --- !u!1 &8697167081429752568
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,17 +957,13 @@ Transform:
   m_Father: {fileID: 5489489753528983020}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &3851346141389585752
+--- !u!1001 &4226857929518517430
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 6847076282167227065}
     m_Modifications:
-    - target: {fileID: 175655152801635228, guid: 50070ca2227114244aafd712fee1a817, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 3827220359492956702, guid: 50070ca2227114244aafd712fee1a817, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1017,6 +999,14 @@ PrefabInstance:
     - target: {fileID: 3827220359492956702, guid: 50070ca2227114244aafd712fee1a817, type: 3}
       propertyPath: m_SizeDelta.y
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3827220359492956702, guid: 50070ca2227114244aafd712fee1a817, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3827220359492956702, guid: 50070ca2227114244aafd712fee1a817, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 3827220359492956702, guid: 50070ca2227114244aafd712fee1a817, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1078,26 +1068,14 @@ PrefabInstance:
       propertyPath: trackTarget
       value: 
       objectReference: {fileID: 5489489753528983011}
-    - target: {fileID: 6246710498797220556, guid: 50070ca2227114244aafd712fee1a817, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 6363205333186771476, guid: 50070ca2227114244aafd712fee1a817, type: 3}
       propertyPath: m_Name
       value: World Space Health
       objectReference: {fileID: 0}
-    - target: {fileID: 6363205333186771476, guid: 50070ca2227114244aafd712fee1a817, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7856239057179279378, guid: 50070ca2227114244aafd712fee1a817, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50070ca2227114244aafd712fee1a817, type: 3}
---- !u!224 &31452950607990598 stripped
+--- !u!224 &1132044286658281128 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3827220359492956702, guid: 50070ca2227114244aafd712fee1a817, type: 3}
-  m_PrefabInstance: {fileID: 3851346141389585752}
+  m_PrefabInstance: {fileID: 4226857929518517430}
   m_PrefabAsset: {fileID: 0}

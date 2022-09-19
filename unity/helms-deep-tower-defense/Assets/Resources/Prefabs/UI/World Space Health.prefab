@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 3827220359492956702}
   - component: {fileID: 1561079630805216958}
   - component: {fileID: 6185909378311843535}
+  - component: {fileID: 7641546806808448548}
   m_Layer: 5
   m_Name: World Space Health
   m_TagString: Untagged
@@ -215,14 +216,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trackTarget: {fileID: 0}
   healthBarSlider: {fileID: 1561079630805216958}
-  _damageable:
-    id: 0
-  _healthHaver:
-    id: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: , ns: , asm: }
+--- !u!114 &7641546806808448548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6363205333186771476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46ca8cbee3148138bd1ee3ca0fd979b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7856239057179279378
 GameObject:
   m_ObjectHideFlags: 0
