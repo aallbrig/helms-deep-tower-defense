@@ -76,6 +76,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  layerMaskFilter:
+    serializedVersion: 2
+    m_Bits: 0
+  impactEffect: {fileID: 6385665651227388946, guid: 103e1681bbce44b7e91a853d53d0e51d, type: 3}
 --- !u!1 &3829346613921561633
 GameObject:
   m_ObjectHideFlags: 0
