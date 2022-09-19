@@ -2,8 +2,10 @@ using System.Collections;
 using Model.Factories;
 using MonoBehaviours.Combat;
 using NUnit.Framework;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.TestTools.Utils;
 
 namespace Tests.PlayMode.Scenarios.ForProjectiles
 {
@@ -53,6 +55,22 @@ namespace Tests.PlayMode.Scenarios.ForProjectiles
             yield return new WaitForSeconds(0.2f);
 
             Assert.IsTrue(previousPosition.z < projectile.transform.localPosition.z, "project needs to move forward");
+        }
+        [UnityTest]
+        public IEnumerator Projectile_Use_ProjectileConfiguration()
+        {
+            var projectileConfiguration = ScriptableObject.CreateInstance<ProjectileConfiguration>();
+            projectileConfiguration.projectileSpeed = 69f;
+            var projectile = _prefabSpawner.Spawn();
+            CleanupAtEnd(projectile);
+            TestCameraLookAt(projectile.transform);
+            var projectileComponent = projectile.GetComponent<Projectile>();
+            yield return null;
+
+            projectileComponent.config = projectileConfiguration;
+
+            Assert.NotNull(projectileComponent.Config, "IProjectileConfiguration interface needs to be set");
+            Assert.IsTrue(Utils.AreFloatsEqual(projectileComponent.Config.speed, projectileConfiguration.speed, 10e-6f));
         }
     }
 }

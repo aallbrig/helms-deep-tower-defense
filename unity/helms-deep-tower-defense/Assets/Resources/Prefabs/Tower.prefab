@@ -596,6 +596,7 @@ MonoBehaviour:
   firePoint: {fileID: 8270081396281047872}
   turret: {fileID: 7411855855563759998}
   shotEffect: {fileID: 6385665651227388946, guid: 103e1681bbce44b7e91a853d53d0e51d, type: 3}
+  projectileConfig: {fileID: 11400000, guid: 99ec7917c57034d18b3c91a948acc003, type: 2}
 --- !u!135 &8242692114043458408
 SphereCollider:
   m_ObjectHideFlags: 0

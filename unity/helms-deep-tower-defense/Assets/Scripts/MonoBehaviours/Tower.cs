@@ -15,6 +15,7 @@ namespace MonoBehaviours
         public Transform firePoint;
         public Transform turret;
         public GameObject shotEffect;
+        public ProjectileConfiguration projectileConfig;
         [SerializeField] private BehaviorTree behaviorTree;
         private Collider[] _collidersWithinRange;
         private float _currentHealth;
@@ -46,8 +47,8 @@ namespace MonoBehaviours
             if (shotEffect) Instantiate(shotEffect, firePoint.position, firePoint.rotation);
             var projectile = Instantiate(config.projectilePrefab, firePoint.position, firePoint.rotation);
             var projectileComponent = projectile.GetComponent<Projectile>();
+            projectileComponent.config = projectileConfig;
             projectileComponent.DamageableCollided += damageable => damageable.Damage(config.damage);
-            projectileComponent.layerMaskFilter = layerMaskFilter;
             AttackedTarget?.Invoke(target);
         }
 

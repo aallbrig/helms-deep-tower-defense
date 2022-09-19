@@ -1,23 +1,29 @@
 using System;
 using Model.Combat;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace MonoBehaviours.Combat
 {
     public class Projectile : MonoBehaviour
     {
-        public float speed = 3.0f;
-        public LayerMask layerMaskFilter;
-        public GameObject impactEffect;
+        public ProjectileConfiguration config;
         private Rigidbody _rigidbody;
+
+        public IProjectileConfig Config => config;
+
         private void Awake() => _rigidbody = GetComponent<Rigidbody>();
-        private void Start() => _rigidbody.velocity = transform.forward * speed;
+        private void Start()
+        {
+            config ??= ScriptableObject.CreateInstance<ProjectileConfiguration>();
+            _rigidbody.velocity = transform.forward * Config.speed;
+        }
         private void OnBecameInvisible() => Destroy(gameObject);
         private void OnTriggerEnter(Collider other)
         {
-            if (IsInLayerMask(other.gameObject, layerMaskFilter))
+            if (IsInLayerMask(other.gameObject, Config.layerMaskFilter))
             {
-                if (impactEffect) Instantiate(impactEffect);
+                if (Config.impactEffect) Instantiate(Config.impactEffect);
                 Destroy(gameObject);
                 if (other.TryGetComponent<IDamageable>(out var damageable))
                     DamageableCollided?.Invoke(damageable);
@@ -26,6 +32,7 @@ namespace MonoBehaviours.Combat
 
         public event Action<IDamageable> DamageableCollided;
 
-        private bool IsInLayerMask(GameObject other, LayerMask layerMask) => layerMask == (layerMask | (1 << other.layer));
+        private static bool IsInLayerMask(GameObject other, LayerMask layerMask) =>
+            layerMask == (layerMask | (1 << other.layer));
     }
 }
