@@ -13,7 +13,6 @@ namespace MonoBehaviours.AI
 
         public EnemyConfiguration config;
         public Path currentPath;
-        public float maxHealth = 3f;
         public Transform theTarget;
         public bool debugEnabled;
         private Transform _attackPoint;
@@ -45,7 +44,7 @@ namespace MonoBehaviours.AI
             _lastAttackTime = Time.time - config.AttackDelay;
             path = currentPath;
             NewTargetAcquired += newTarget => transform.LookAt(newTarget);
-            _currentHealth = maxHealth;
+            _currentHealth = config.MaxHealth;
         }
 
         private void Update() => _behaviorTree.Tick();
@@ -97,7 +96,7 @@ namespace MonoBehaviours.AI
             set => currentPath = value;
         }
 
-        public float CurrentHealthNormalized() => _currentHealth / maxHealth;
+        public float CurrentHealthNormalized() => _currentHealth / config.MaxHealth;
 
         public event Action Killed;
 

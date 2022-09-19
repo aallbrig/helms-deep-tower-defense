@@ -22,6 +22,8 @@ namespace ScriptableObjects
         public float senseDelay = 0.4f;
         public float attackDelay = 1.1f;
         public GameObject projectilePrefab;
+        public GameObject shotEffect;
+        public ProjectileConfiguration projectileConfig;
 
         public BehaviorTree BuildBehaviorTree(GameObject context)
         {

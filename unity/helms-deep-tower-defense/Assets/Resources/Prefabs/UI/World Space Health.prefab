@@ -214,6 +214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8af7246d9a4029a53eb751c5545310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  background: {fileID: 7856239057179279378}
+  foreground: {fileID: 6246710498797220556}
   trackTarget: {fileID: 0}
   healthBarSlider: {fileID: 1561079630805216958}
 --- !u!114 &7641546806808448548

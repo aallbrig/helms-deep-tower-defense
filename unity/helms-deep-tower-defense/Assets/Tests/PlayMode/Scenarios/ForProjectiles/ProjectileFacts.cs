@@ -69,9 +69,11 @@ namespace Tests.PlayMode.Scenarios.ForProjectiles
             yield return null;
 
             projectileComponent.config = projectileConfiguration;
+            projectileComponent.TeamConfig = teamConfiguration;
 
             Assert.NotNull(projectileComponent.Config, "IProjectileConfiguration interface needs to be set");
             Assert.IsTrue(Utils.AreFloatsEqual(projectileComponent.Config.speed, projectileConfiguration.speed, 10e-6f));
+            Assert.AreEqual(projectileComponent.TeamConfig.enemies, teamConfiguration.enemies);
         }
     }
 }

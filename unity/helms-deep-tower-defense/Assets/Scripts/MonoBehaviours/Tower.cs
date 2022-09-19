@@ -14,18 +14,19 @@ namespace MonoBehaviours
         public TowerConfiguration config;
         public Transform firePoint;
         public Transform turret;
-        public GameObject shotEffect;
-        public ProjectileConfiguration projectileConfig;
         [SerializeField] private BehaviorTree behaviorTree;
         private Collider[] _collidersWithinRange;
         private float _currentHealth;
         private GameObject _currentTarget;
         private float _lastAttackTime;
         private float _lastSenseTime;
+        private ITeamConfig _teamConfig;
 
         private void Awake()
         {
             config ??= ScriptableObject.CreateInstance<TowerConfiguration>();
+            _teamConfig ??= GetComponent<ITeamConfig>();
+            _teamConfig ??= ScriptableObject.CreateInstance<TeamConfiguration>();
             _currentHealth = MaxHealth;
             behaviorTree = config.BuildBehaviorTree(gameObject);
         }
@@ -44,10 +45,11 @@ namespace MonoBehaviours
 
         public void Attack(GameObject target)
         {
-            if (shotEffect) Instantiate(shotEffect, firePoint.position, firePoint.rotation);
+            if (config.shotEffect) Instantiate(config.shotEffect, firePoint.position, firePoint.rotation);
             var projectile = Instantiate(config.projectilePrefab, firePoint.position, firePoint.rotation);
             var projectileComponent = projectile.GetComponent<Projectile>();
-            projectileComponent.config = projectileConfig;
+            projectileComponent.config = config.projectileConfig;
+            projectileComponent.TeamConfig = _teamConfig;
             projectileComponent.DamageableCollided += damageable => damageable.Damage(config.damage);
             AttackedTarget?.Invoke(target);
         }

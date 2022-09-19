@@ -9,8 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd5c5f29bdb346f69163df163a0fcf31, type: 3}
-  m_Name: basic projectile
+  m_Script: {fileID: 11500000, guid: 0a6ab8bd5c8047a8b56d8c57c948bbb7, type: 3}
+  m_Name: Team Bad
   m_EditorClassIdentifier: 
-  projectileSpeed: 8
-  impactEffectPrefab: {fileID: 6385665651227388946, guid: 103e1681bbce44b7e91a853d53d0e51d, type: 3}
+  alliesLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  enemiesLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
