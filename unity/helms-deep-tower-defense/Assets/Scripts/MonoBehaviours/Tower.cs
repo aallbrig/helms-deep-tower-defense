@@ -10,7 +10,6 @@ namespace MonoBehaviours
 {
     public class Tower : MonoBehaviour, IDamageable, IKillable, ITowerConfig, IAttack, IHaveHealth
     {
-        public LayerMask layerMaskFilter;
         public TowerConfiguration config;
         public Transform firePoint;
         public Transform turret;
@@ -83,7 +82,7 @@ namespace MonoBehaviours
         public TaskStatus SenseForTargets()
         {
             _lastSenseTime = Time.time;
-            _collidersWithinRange = Physics.OverlapSphere(transform.position, config.range, layerMaskFilter);
+            _collidersWithinRange = Physics.OverlapSphere(transform.position, config.range, _teamConfig.enemies);
             return TaskStatus.Success;
         }
         public TaskStatus AttackTarget()

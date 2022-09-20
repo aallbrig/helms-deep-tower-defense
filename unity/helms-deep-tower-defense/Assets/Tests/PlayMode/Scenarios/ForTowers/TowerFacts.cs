@@ -11,7 +11,7 @@ namespace Tests.PlayMode.Scenarios.ForTowers
     public class TowerFacts : ScenarioTest
     {
         private readonly PrefabSpawner _dummyTowerTargetSpawner = new PrefabSpawner("Prefabs/Dummy Tower Target");
-        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Tower");
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Basic Tower");
 
         [UnityTest]
         public IEnumerator Tower_UsesA_TowerComponent()
