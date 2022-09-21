@@ -28,6 +28,7 @@ namespace MonoBehaviours.Factories
             activeTower = tower;
             activeTowerComponent = activeTower.GetComponent<Tower>();
             activeTeamComponent = activeTower.GetComponent<Team>();
+            indicator.gameObject.SetActive(true);
         }
 
         public event Action<GameObject> Spawned;
