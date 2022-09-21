@@ -9,6 +9,7 @@ namespace MonoBehaviours.Combat
         public TeamConfiguration config;
         private void Awake()
         {
+            config ??= ScriptableObject.CreateInstance<TeamConfiguration>();
             if (config == null) Debug.LogException(new Exception($"{name} Team component requires a team configuration"));
         }
 
