@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Model.Factories.Camera;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.Scenarios
 {
-    public class ScenarioTest
+    public class ScenarioTest: InputTestFixture
     {
         private readonly TestCameraSpawner _testCameraSpawner = new TestCameraSpawner(new Vector3(0, 10, -10));
         private GameObject _testCamera;

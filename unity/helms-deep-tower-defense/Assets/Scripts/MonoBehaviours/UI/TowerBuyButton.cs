@@ -9,12 +9,12 @@ namespace MonoBehaviours.UI
     {
         public event Action<GameObject> TowerBuyButtonClicked;
         public GameObject prefab;
-        private Button _button;
+        public Button button;
         private void Start()
         {
             if (prefab == null) Debug.LogException(new Exception($"{name} is required to have a 'tower' prefab"));
-            _button = GetComponent<Button>();
-            _button.onClick.AddListener(OnButtonClick);
+            button = GetComponent<Button>();
+            button.onClick.AddListener(OnButtonClick);
         }
         private void OnButtonClick()
         {
