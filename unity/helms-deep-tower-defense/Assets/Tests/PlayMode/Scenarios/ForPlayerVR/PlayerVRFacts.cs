@@ -10,7 +10,6 @@ namespace Tests.PlayMode.Scenarios.ForPlayerVR
     {
         private readonly ISpawner _instanceSpawner = new PrefabSpawner("Prefabs/XR Origin (Player)");
 
-        [UnityTest]
         public IEnumerator PlayerVR_UsesA_InputController()
         {
             var instance = _instanceSpawner.Spawn();
