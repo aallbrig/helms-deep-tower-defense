@@ -7,6 +7,13 @@
       "dependencies": {},
       "url": "https://registry.npmjs.org"
     },
+    "com.fluid.state-machine": {
+      "version": "2.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
     "com.unity.cinemachine": {
       "version": "2.6.17",
       "depth": 0,

@@ -37,6 +37,15 @@ namespace Generated
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pointer Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""cfecee07-494d-46d0-a86f-a1c4a4ef03f7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -50,6 +59,28 @@ namespace Generated
                     ""action"": ""Pointer Position"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22425c22-ac48-4798-b259-da1096cc59f1"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86b10a7e-d668-4e61-815e-1afd3a38d704"",
+                    ""path"": ""<Pointer>/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -59,6 +90,7 @@ namespace Generated
             // Gameplay
             m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
             m_Gameplay_PointerPosition = m_Gameplay.FindAction("Pointer Position", throwIfNotFound: true);
+            m_Gameplay_PointerClick = m_Gameplay.FindAction("Pointer Click", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -119,11 +151,13 @@ namespace Generated
         private readonly InputActionMap m_Gameplay;
         private IGameplayActions m_GameplayActionsCallbackInterface;
         private readonly InputAction m_Gameplay_PointerPosition;
+        private readonly InputAction m_Gameplay_PointerClick;
         public struct GameplayActions
         {
             private @PlayerInputActions m_Wrapper;
             public GameplayActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @PointerPosition => m_Wrapper.m_Gameplay_PointerPosition;
+            public InputAction @PointerClick => m_Wrapper.m_Gameplay_PointerClick;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -136,6 +170,9 @@ namespace Generated
                     @PointerPosition.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerPosition;
                     @PointerPosition.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerPosition;
                     @PointerPosition.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerPosition;
+                    @PointerClick.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerClick;
+                    @PointerClick.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerClick;
+                    @PointerClick.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerClick;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
@@ -143,6 +180,9 @@ namespace Generated
                     @PointerPosition.started += instance.OnPointerPosition;
                     @PointerPosition.performed += instance.OnPointerPosition;
                     @PointerPosition.canceled += instance.OnPointerPosition;
+                    @PointerClick.started += instance.OnPointerClick;
+                    @PointerClick.performed += instance.OnPointerClick;
+                    @PointerClick.canceled += instance.OnPointerClick;
                 }
             }
         }
@@ -150,6 +190,7 @@ namespace Generated
         public interface IGameplayActions
         {
             void OnPointerPosition(InputAction.CallbackContext context);
+            void OnPointerClick(InputAction.CallbackContext context);
         }
     }
 }
