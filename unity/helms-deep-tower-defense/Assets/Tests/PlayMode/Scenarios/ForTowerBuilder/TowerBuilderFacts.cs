@@ -96,5 +96,33 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             Assert.AreNotEqual(Vector3.zero, towerBuilder.indicator.position,
                 "indicator expected to no longer be at (0, 0, 0)");
         }
+
+        [UnityTest]
+        public IEnumerator TowerBuilder_Indicator_IsAPreviewOfTheTower()
+        {
+            var pointer = InputSystem.AddDevice<Pointer>();
+            var instance = _prefabSpawner.Spawn();
+            CleanupAtEnd(instance);
+            TestCameraLookAt(instance.transform);
+            CleanupAtEnd(_groundSpawner.Spawn());
+            var dummyBuyButton = new GameObject();
+            dummyBuyButton.AddComponent<Team>();
+            var buyButton = dummyBuyButton.AddComponent<TowerBuyButton>();
+            var buyButtonPrefab = new GameObject();
+            buyButton.prefab = buyButtonPrefab;
+            CleanupAtEnd(dummyBuyButton);
+
+            yield return null;
+            var towerBuilder = instance.GetComponent<TowerBuilder>();
+            GameObject recordedTowerInstance = null;
+            towerBuilder.PreviewIndicatorReplaced += towerInstance => recordedTowerInstance = towerInstance;
+            buyButton.button.onClick.Invoke();
+            yield return null;
+
+            Move(pointer.position, new Vector2(0, 10));
+
+            Assert.IsNotNull(recordedTowerInstance);
+            Assert.AreEqual(buyButtonPrefab, recordedTowerInstance);
+        }
     }
 }

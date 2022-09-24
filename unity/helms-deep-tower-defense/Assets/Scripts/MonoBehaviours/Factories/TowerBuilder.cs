@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using CleverCrow.Fluid.FSMs;
 using Generated;
 using Model.Factories;
-using MonoBehaviours.Combat;
 using MonoBehaviours.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,10 +20,13 @@ namespace MonoBehaviours.Factories
 
         public Transform indicator;
         public LayerMask validBuildLayer;
+        public float placementRayLength = 200f;
         [SerializeField] private GameObject activeTower;
         public List<TowerBuyButton> towerBuyButtons = new List<TowerBuyButton>();
         [SerializeReference] private IFsm _builderStateMachine;
+        private Ray _indicatorPlacementRay;
         private PlayerInputActions _input;
+        private List<GameObject> _activeTowerPreviewIndicators = new List<GameObject>();
         private void Awake()
         {
             _input = new PlayerInputActions();
@@ -72,6 +74,12 @@ namespace MonoBehaviours.Factories
         private void Update() => _builderStateMachine.Tick();
         private void OnEnable() => _input.Enable();
         private void OnDisable() => _input.Disable();
+        private void OnDrawGizmos()
+        {
+            if (_indicatorPlacementRay.direction != default)
+                Debug.DrawRay(_indicatorPlacementRay.origin, _indicatorPlacementRay.direction * placementRayLength,
+                    Color.red);
+        }
 
         public event Action<GameObject> Spawned;
 
@@ -79,8 +87,6 @@ namespace MonoBehaviours.Factories
         {
             if (activeTower == null) return null;
             var newTower = Instantiate(activeTower, indicator.transform.position, indicator.transform.rotation);
-            if (newTower.TryGetComponent<Tower>(out var tower)) {}
-            if (newTower.TryGetComponent<Team>(out var team)) {}
             Spawned?.Invoke(newTower);
             ResetActiveTower();
             return newTower;
@@ -95,10 +101,9 @@ namespace MonoBehaviours.Factories
         {
             var pointerPosition = ctx.ReadValue<Vector2>();
             Debug.Log($"pointer position: {pointerPosition}");
-            var ray = Camera.main.ScreenPointToRay(pointerPosition);
-            Debug.DrawRay(ray.origin, ray.direction * 200f, Color.red);
-            if (Physics.Raycast(ray, out var hit, 200f, validBuildLayer))
-                indicator.position = hit.point;
+            _indicatorPlacementRay = Camera.main.ScreenPointToRay(pointerPosition);
+            if (Physics.Raycast(_indicatorPlacementRay, out var hit, placementRayLength, validBuildLayer))
+                indicator.position = new Vector3(hit.point.x, 0, hit.point.z);
         }
 
         public event Action ActiveTowerToBuildReset;
@@ -109,6 +114,37 @@ namespace MonoBehaviours.Factories
             ActiveTowerToBuildReset?.Invoke();
         }
 
-        private void OnTowerBuyButtonClicked(GameObject tower) => activeTower = tower;
+        private void OnTowerBuyButtonClicked(GameObject tower)
+        {
+            activeTower = tower;
+            SetActiveTowerIndicator();
+        }
+        private void SetActiveTowerIndicator()
+        {
+            UnsetActiveTowerPreview();
+            var activeTowerIndicator = GetActiveTowerPreview();
+            indicator = activeTowerIndicator.transform;
+            PreviewIndicatorReplaced?.Invoke(activeTowerIndicator);
+        }
+        private void UnsetActiveTowerPreview()
+        {
+            indicator.position = new Vector3(0, 100, 0);
+        }
+        private GameObject GetActiveTowerPreview()
+        {
+            var towerPreview = _activeTowerPreviewIndicators.Find(preview => preview.name == activeTower.name);
+            if (towerPreview == null)
+            {
+                towerPreview = Instantiate(activeTower, transform);
+                towerPreview.name = $"{activeTower.name}";
+                if (towerPreview.TryGetComponent<Tower>(out var tower)) tower.enabled = false;
+                if (towerPreview.TryGetComponent<Collider>(out var collider)) collider.enabled = false;
+                foreach (var childCollider in towerPreview.GetComponentsInChildren<Collider>()) childCollider.enabled = false;
+                _activeTowerPreviewIndicators.Add(towerPreview);
+            }
+            return towerPreview;
+        }
+
+        public event Action<GameObject> PreviewIndicatorReplaced;
     }
 }
