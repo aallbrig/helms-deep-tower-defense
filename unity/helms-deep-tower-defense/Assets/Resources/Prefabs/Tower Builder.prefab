@@ -48,6 +48,10 @@ MonoBehaviour:
   validBuildLayer:
     serializedVersion: 2
     m_Bits: 8
+  obstaclesLayer:
+    serializedVersion: 2
+    m_Bits: 192
+  placementRayLength: 200
   activeTower: {fileID: 0}
   towerBuyButtons: []
   _builderStateMachine:

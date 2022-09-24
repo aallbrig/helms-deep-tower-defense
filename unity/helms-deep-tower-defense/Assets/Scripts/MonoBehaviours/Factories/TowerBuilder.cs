@@ -21,14 +21,15 @@ namespace MonoBehaviours.Factories
 
         public Transform indicator;
         public LayerMask validBuildLayer;
+        public LayerMask obstaclesLayer;
         public float placementRayLength = 200f;
         [SerializeField] private GameObject activeTower;
         public List<TowerBuyButton> towerBuyButtons = new List<TowerBuyButton>();
+        private readonly Vector3 _activeTowerPreviewLocation = new Vector3(0, 100, 0);
+        private readonly List<GameObject> _activeTowerPreviewIndicators = new List<GameObject>();
         [SerializeReference] private IFsm _builderStateMachine;
         private Ray _indicatorPlacementRay;
         private PlayerInputActions _input;
-        private List<GameObject> _activeTowerPreviewIndicators = new List<GameObject>();
-        private readonly Vector3 _activeTowerPreviewLocation = new Vector3(0, 100, 0);
         private void Awake()
         {
             _input = new PlayerInputActions();
@@ -87,11 +88,23 @@ namespace MonoBehaviours.Factories
 
         public GameObject Spawn()
         {
-            if (activeTower == null) return null;
+            if (activeTower == null || TowerNotPlaceable()) return null;
+
             var newTower = Instantiate(activeTower, indicator.transform.position, indicator.transform.rotation);
             Spawned?.Invoke(newTower);
             ResetActiveTower();
             return newTower;
+        }
+        private bool TowerNotPlaceable()
+        {
+            var raycastHitsObstacleCheck = Physics.Raycast(
+                indicator.position + new Vector3(0, -1, 0),
+                Vector3.up,
+                out var hit,
+                10f,
+                obstaclesLayer
+            );
+            return hit.collider != null;
         }
         private void OnPointerClicked(InputAction.CallbackContext ctx) =>
             // Spawn a new tower at the current indicator transform position
@@ -106,6 +119,8 @@ namespace MonoBehaviours.Factories
             _indicatorPlacementRay = Camera.main.ScreenPointToRay(pointerPosition);
             if (Physics.Raycast(_indicatorPlacementRay, out var hit, placementRayLength, validBuildLayer))
                 indicator.position = new Vector3(hit.point.x, 0, hit.point.z);
+
+            indicator.gameObject.SetActive(!TowerNotPlaceable());
         }
 
         public event Action ActiveTowerToBuildReset;

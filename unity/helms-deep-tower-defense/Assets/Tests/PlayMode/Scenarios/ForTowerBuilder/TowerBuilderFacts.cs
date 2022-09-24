@@ -125,5 +125,44 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             Assert.IsNotNull(recordedTowerInstance);
             Assert.AreEqual(buyButtonPrefab.name, recordedTowerInstance.name);
         }
+
+        // [UnityTest]
+        public IEnumerator TowerBuilder_CannotPlace_TwoTowersAtSameLocation()
+        {
+            var pointer = InputSystem.AddDevice<Pointer>();
+            var instance = _prefabSpawner.Spawn();
+            CleanupAtEnd(instance);
+            TestCameraLookAt(instance.transform);
+            CleanupAtEnd(_groundSpawner.Spawn());
+            var dummyBuyButton = new GameObject();
+            dummyBuyButton.AddComponent<Team>();
+            var buyButton = dummyBuyButton.AddComponent<TowerBuyButton>();
+            var buyButtonPrefab = new GameObject
+            {
+                name = "test tower",
+                layer = LayerMask.NameToLayer("good guys")
+            };
+            buyButton.prefab = buyButtonPrefab;
+            CleanupAtEnd(dummyBuyButton);
+
+            yield return null;
+            var towerBuilder = instance.GetComponent<TowerBuilder>();
+            var spawnCount = 0;
+            towerBuilder.Spawned += _ => spawnCount++;
+
+            // Try build two towers in the same location
+            buyButton.button.onClick.Invoke();
+            yield return null;
+            Move(pointer.position, new Vector2(0, 10));
+            PressAndRelease(pointer.press);
+            yield return null;
+            buyButton.button.onClick.Invoke();
+            yield return null;
+            Move(pointer.position, new Vector2(0, 10));
+            PressAndRelease(pointer.press);
+            yield return null;
+
+            Assert.AreEqual(1, spawnCount);
+        }
     }
 }

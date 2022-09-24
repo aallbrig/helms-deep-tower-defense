@@ -1729,10 +1729,6 @@ PrefabInstance:
       value: Tower Builder
       objectReference: {fileID: 0}
     - target: {fileID: 7195604884566994038, guid: 580474f2639904937a8fedff4c6fb73d, type: 3}
-      propertyPath: validBuildLayer.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7195604884566994038, guid: 580474f2639904937a8fedff4c6fb73d, type: 3}
       propertyPath: activeTeamConfiguration
       value: 
       objectReference: {fileID: 11400000, guid: 4cf904b5266614efeae64ac662d1c3a1, type: 2}
