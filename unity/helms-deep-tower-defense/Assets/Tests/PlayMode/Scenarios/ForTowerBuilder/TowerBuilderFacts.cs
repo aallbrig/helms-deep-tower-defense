@@ -109,6 +109,7 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             dummyBuyButton.AddComponent<Team>();
             var buyButton = dummyBuyButton.AddComponent<TowerBuyButton>();
             var buyButtonPrefab = new GameObject();
+            buyButtonPrefab.name = "test tower";
             buyButton.prefab = buyButtonPrefab;
             CleanupAtEnd(dummyBuyButton);
 
@@ -122,7 +123,7 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             Move(pointer.position, new Vector2(0, 10));
 
             Assert.IsNotNull(recordedTowerInstance);
-            Assert.AreEqual(buyButtonPrefab, recordedTowerInstance);
+            Assert.AreEqual(buyButtonPrefab.name, recordedTowerInstance.name);
         }
     }
 }

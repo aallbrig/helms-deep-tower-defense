@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CleverCrow.Fluid.FSMs;
 using Generated;
 using Model.Factories;
@@ -27,6 +28,7 @@ namespace MonoBehaviours.Factories
         private Ray _indicatorPlacementRay;
         private PlayerInputActions _input;
         private List<GameObject> _activeTowerPreviewIndicators = new List<GameObject>();
+        private readonly Vector3 _activeTowerPreviewLocation = new Vector3(0, 100, 0);
         private void Awake()
         {
             _input = new PlayerInputActions();
@@ -111,6 +113,7 @@ namespace MonoBehaviours.Factories
         private void ResetActiveTower()
         {
             activeTower = null;
+            ResetActiveTowerPreviews();
             ActiveTowerToBuildReset?.Invoke();
         }
 
@@ -121,14 +124,15 @@ namespace MonoBehaviours.Factories
         }
         private void SetActiveTowerIndicator()
         {
-            UnsetActiveTowerPreview();
             var activeTowerIndicator = GetActiveTowerPreview();
             indicator = activeTowerIndicator.transform;
             PreviewIndicatorReplaced?.Invoke(activeTowerIndicator);
         }
-        private void UnsetActiveTowerPreview()
+        private void ResetActiveTowerPreviews()
         {
-            indicator.position = new Vector3(0, 100, 0);
+            foreach (var towerInstance in _activeTowerPreviewIndicators.Where(_ =>
+                _.transform.position != _activeTowerPreviewLocation))
+                towerInstance.transform.position = _activeTowerPreviewLocation;
         }
         private GameObject GetActiveTowerPreview()
         {
