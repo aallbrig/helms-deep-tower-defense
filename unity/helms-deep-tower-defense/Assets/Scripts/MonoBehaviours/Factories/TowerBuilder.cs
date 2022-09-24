@@ -60,6 +60,7 @@ namespace MonoBehaviours.Factories
                             indicator.gameObject.SetActive(false);
                             _input.Gameplay.PointerPosition.performed -= OnPointerPositionMove;
                             _input.Gameplay.PointerClick.started -= OnPointerClicked;
+                            ResetActiveTowerPreviews();
                         })
                         .Update(action =>
                         {
@@ -97,7 +98,7 @@ namespace MonoBehaviours.Factories
         }
         private bool TowerNotPlaceable()
         {
-            var raycastHitsObstacleCheck = Physics.Raycast(
+            Physics.Raycast(
                 indicator.position + new Vector3(0, -1, 0),
                 Vector3.up,
                 out var hit,
@@ -128,7 +129,6 @@ namespace MonoBehaviours.Factories
         private void ResetActiveTower()
         {
             activeTower = null;
-            ResetActiveTowerPreviews();
             ActiveTowerToBuildReset?.Invoke();
         }
 

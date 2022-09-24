@@ -13,6 +13,7 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
     public class TowerBuilderFacts : ScenarioTest
     {
         private readonly PrefabSpawner _groundSpawner = new PrefabSpawner("Prefabs/Ground");
+        private readonly PrefabSpawner _basicTowerButton = new PrefabSpawner("Prefabs/UI/Buy Basic Tower Button");
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Tower Builder");
         [UnityTest]
         public IEnumerator TowerBuilder_UsesA_TowerBuilderComponent()
@@ -126,7 +127,7 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             Assert.AreEqual(buyButtonPrefab.name, recordedTowerInstance.name);
         }
 
-        // [UnityTest]
+        [UnityTest]
         public IEnumerator TowerBuilder_CannotPlace_TwoTowersAtSameLocation()
         {
             var pointer = InputSystem.AddDevice<Pointer>();
@@ -134,16 +135,9 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
             CleanupAtEnd(_groundSpawner.Spawn());
-            var dummyBuyButton = new GameObject();
-            dummyBuyButton.AddComponent<Team>();
-            var buyButton = dummyBuyButton.AddComponent<TowerBuyButton>();
-            var buyButtonPrefab = new GameObject
-            {
-                name = "test tower",
-                layer = LayerMask.NameToLayer("good guys")
-            };
-            buyButton.prefab = buyButtonPrefab;
-            CleanupAtEnd(dummyBuyButton);
+            var buyButtonInstance = _basicTowerButton.Spawn();
+            CleanupAtEnd(buyButtonInstance);
+            var buyButton = buyButtonInstance.GetComponent<TowerBuyButton>();
 
             yield return null;
             var towerBuilder = instance.GetComponent<TowerBuilder>();
@@ -158,6 +152,8 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             yield return null;
             buyButton.button.onClick.Invoke();
             yield return null;
+            // If you Move() to the same spot, no change occurs therefore no callbacks called
+            Move(pointer.position, new Vector2(0, 0));
             Move(pointer.position, new Vector2(0, 10));
             PressAndRelease(pointer.press);
             yield return null;

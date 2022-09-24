@@ -590,11 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9610d9d8af71447daa812facff8a1316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMaskFilter:
-    serializedVersion: 2
-    m_Bits: 64
   config: {fileID: 11400000, guid: 777c0cf43648df64f96cfe18a55e1bdc, type: 2}
-  teamConfig: {fileID: 11400000, guid: 4cf904b5266614efeae64ac662d1c3a1, type: 2}
   firePoint: {fileID: 8270081396281047872}
   turret: {fileID: 7411855855563759998}
 --- !u!135 &8242692114043458408
@@ -608,8 +604,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.85
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &6219600961238866051
 MonoBehaviour:
   m_ObjectHideFlags: 0
