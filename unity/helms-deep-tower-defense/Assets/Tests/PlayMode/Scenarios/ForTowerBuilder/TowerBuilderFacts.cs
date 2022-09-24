@@ -12,8 +12,8 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
 {
     public class TowerBuilderFacts : ScenarioTest
     {
-        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Tower Builder");
         private readonly PrefabSpawner _groundSpawner = new PrefabSpawner("Prefabs/Ground");
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Tower Builder");
         [UnityTest]
         public IEnumerator TowerBuilder_UsesA_TowerBuilderComponent()
         {
@@ -45,7 +45,8 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
 
             Assert.NotNull(instance, "instance of prefab needs to exist");
             Assert.NotNull(towerBuilder, "tower builder component needs to exist");
-            Assert.AreEqual(1, towerBuilder.towerBuyButtons.Count, $"the tower count of {towerBuilder.towerBuyButtons.Count} is expected to be 1");
+            Assert.AreEqual(1, towerBuilder.towerBuyButtons.Count,
+                $"the tower count of {towerBuilder.towerBuyButtons.Count} is expected to be 1");
         }
 
         [UnityTest]
@@ -62,11 +63,12 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
 
             yield return null;
             var towerBuilder = instance.GetComponent<TowerBuilder>();
-            Assert.IsFalse(towerBuilder.indicator.gameObject.activeSelf, $"The indicator should start off");
+            Assert.IsFalse(towerBuilder.indicator.gameObject.activeSelf, "The indicator should start off");
 
             buyButton.button.onClick.Invoke();
+            yield return null;
 
-            Assert.IsTrue(towerBuilder.indicator.gameObject.activeSelf, $"The indicator should be on now");
+            Assert.IsTrue(towerBuilder.indicator.gameObject.activeSelf, "The indicator should be on now");
         }
 
         [UnityTest]
@@ -86,11 +88,13 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             yield return null;
             var towerBuilder = instance.GetComponent<TowerBuilder>();
             buyButton.button.onClick.Invoke();
+            yield return null;
             Assert.AreEqual(Vector3.zero, towerBuilder.indicator.position, "indicator expected to start off at (0, 0, 0)");
 
             Move(pointer.position, new Vector2(0, 10));
 
-            Assert.AreNotEqual(Vector3.zero, towerBuilder.indicator.position, "indicator expected to no longer be at (0, 0, 0)");
+            Assert.AreNotEqual(Vector3.zero, towerBuilder.indicator.position,
+                "indicator expected to no longer be at (0, 0, 0)");
         }
     }
 }

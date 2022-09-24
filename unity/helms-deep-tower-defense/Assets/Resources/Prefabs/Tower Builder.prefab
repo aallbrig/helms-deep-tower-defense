@@ -45,13 +45,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   indicator: {fileID: 6820177238950615944}
-  ground:
+  validBuildLayer:
     serializedVersion: 2
     m_Bits: 8
   activeTower: {fileID: 0}
-  activeTowerComponent: {fileID: 0}
-  activeTeamComponent: {fileID: 0}
   towerBuyButtons: []
+  _builderStateMachine:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
 --- !u!1 &7693303807750314924
 GameObject:
   m_ObjectHideFlags: 0
