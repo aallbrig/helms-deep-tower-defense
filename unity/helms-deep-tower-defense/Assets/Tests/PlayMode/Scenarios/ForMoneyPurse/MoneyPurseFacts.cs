@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Model.Factories;
 using MonoBehaviours.Commerce;
+using MonoBehaviours.UI;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -10,6 +11,7 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
     public class MoneyPurseFacts: ScenarioTest
     {
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Systems/Money Purse");
+        private readonly PrefabSpawner _displayGuiSpawner = new PrefabSpawner("Prefabs/UI/Money Display");
         [UnityTest]
         public IEnumerator MoneyPurse_Uses_Components()
         {
@@ -97,6 +99,37 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
             moneyPurseComponent.AddReward(rewardComponent);
             Assert.IsTrue(addedReward);
             Assert.AreEqual(10, moneyPurseComponent.currentMoney);
+        }
+
+        [UnityTest]
+        public IEnumerator MoneyPurse_CanBeRendered_InGUI()
+        {
+            var prefabInstance = _prefabSpawner.Spawn();
+            CleanupAtEnd(prefabInstance);
+            TestCameraLookAt(prefabInstance.transform);
+            var moneyDisplay = _displayGuiSpawner.Spawn();
+            CleanupAtEnd(moneyDisplay);
+            var moneyPurseComponent = prefabInstance.GetComponent<MoneyPurse>();
+            var moneyPurseDisplayComponent = moneyDisplay.GetComponent<MoneyPurseDisplay>();
+            moneyPurseDisplayComponent.moneyPurse = moneyPurseComponent;
+            moneyPurseComponent.currentMoney = 0;
+            yield return null;
+
+            Assert.AreEqual("Gold 0", moneyPurseDisplayComponent.Text());
+            var dummyReward = new GameObject();
+            CleanupAtEnd(dummyReward);
+            var rewardComponent = dummyReward.AddComponent<Reward>();
+            rewardComponent.reward = 10;
+            moneyPurseComponent.AddReward(rewardComponent);
+            Assert.AreEqual("Gold 10", moneyPurseDisplayComponent.Text());
+
+            var dummyCost = new GameObject();
+            CleanupAtEnd(dummyCost);
+            var costComponent = dummyReward.AddComponent<Cost>();
+            costComponent.price = 10;
+            moneyPurseComponent.Purchase(costComponent);
+
+            Assert.AreEqual("Gold 0", moneyPurseDisplayComponent.Text());
         }
     }
 }
