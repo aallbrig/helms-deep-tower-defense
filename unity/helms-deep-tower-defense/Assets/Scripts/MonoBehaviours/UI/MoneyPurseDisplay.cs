@@ -9,6 +9,8 @@ namespace MonoBehaviours.UI
         public MoneyPurse moneyPurse;
         public TextMeshProUGUI staticText;
         public TextMeshProUGUI dynamicText;
+        public GameObject insufficientFundsAlert;
+        public float resetAfterDelayInSeconds = 2f;
 
         private void Awake()
         {
@@ -19,6 +21,16 @@ namespace MonoBehaviours.UI
         {
             moneyPurse.NewCurrentMoneyPosted += OnNewCurrentMoneyPosted;
             moneyPurse.MoneyChanged += OnMoneyChanged;
+            moneyPurse.InsufficientFunds += OnInsufficientFunds;
+        }
+        private void OnInsufficientFunds()
+        {
+            insufficientFundsAlert.SetActive(true);
+            Invoke(nameof(ResetAlerts), resetAfterDelayInSeconds);
+        }
+        private void ResetAlerts()
+        {
+            insufficientFundsAlert.SetActive(false);
         }
         private void OnMoneyChanged(int amountChangedBy)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using CleverCrow.Fluid.FSMs;
 using Generated;
 using Model.Factories;
+using MonoBehaviours.Commerce;
 using MonoBehaviours.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -90,6 +91,13 @@ namespace MonoBehaviours.Factories
         public GameObject Spawn()
         {
             if (activeTower == null || TowerNotPlaceable()) return null;
+            var moneyPurse = FindObjectOfType<MoneyPurse>();
+            var towerCost = activeTower.GetComponent<ICostMoney>();
+            if (moneyPurse != null)
+                if (moneyPurse.PriceCheck(towerCost))
+                    moneyPurse.Purchase(towerCost);
+                else
+                    return null;
 
             var newTower = Instantiate(activeTower, indicator.transform.position, indicator.transform.rotation);
             Spawned?.Invoke(newTower);
