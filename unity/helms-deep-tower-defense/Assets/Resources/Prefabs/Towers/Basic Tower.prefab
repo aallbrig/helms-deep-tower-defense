@@ -553,6 +553,7 @@ GameObject:
   - component: {fileID: 6287663571915273346}
   - component: {fileID: 8242692114043458408}
   - component: {fileID: 6219600961238866051}
+  - component: {fileID: 1938933121793037568}
   m_Layer: 7
   m_Name: Basic Tower
   m_TagString: Untagged
@@ -619,6 +620,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 4cf904b5266614efeae64ac662d1c3a1, type: 2}
+--- !u!114 &1938933121793037568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5489489753528983011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c87331b98564a5792ac81d8bc1abc30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  price: 100
 --- !u!1 &5679751987939886726
 GameObject:
   m_ObjectHideFlags: 0

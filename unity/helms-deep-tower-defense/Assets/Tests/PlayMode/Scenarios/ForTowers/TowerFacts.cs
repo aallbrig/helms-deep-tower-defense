@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Model.Factories;
 using MonoBehaviours;
+using MonoBehaviours.Commerce;
 using NUnit.Framework;
 using ScriptableObjects;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Tests.PlayMode.Scenarios.ForTowers
     public class TowerFacts : ScenarioTest
     {
         private readonly PrefabSpawner _dummyTowerTargetSpawner = new PrefabSpawner("Prefabs/Dummy Tower Target");
-        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Basic Tower");
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Towers/Basic Tower");
 
         [UnityTest]
         public IEnumerator Tower_UsesA_TowerComponent()
@@ -24,6 +25,19 @@ namespace Tests.PlayMode.Scenarios.ForTowers
             var towerComponent = tower.GetComponent<Tower>();
             Assert.NotNull(towerComponent, "component exists");
         }
+
+        [UnityTest]
+        public IEnumerator Tower_UsesA_CostComponent()
+        {
+            var tower = _prefabSpawner.Spawn();
+            CleanupAtEnd(tower);
+            TestCameraLookAt(tower.transform);
+            yield return null;
+
+            Assert.IsTrue(tower.TryGetComponent<Cost>(out _), "needs a cost component");
+            Assert.IsTrue(tower.TryGetComponent<ICostMoney>(out _), "needs a component who implements ICostMoney");
+        }
+
 
         [UnityTest]
         public IEnumerator Tower_UsesA_Trigger()

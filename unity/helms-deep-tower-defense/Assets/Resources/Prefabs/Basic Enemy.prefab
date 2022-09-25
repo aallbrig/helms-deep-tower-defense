@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 3009119503786221139}
   - component: {fileID: 126729698531510319}
   - component: {fileID: 2879866509834691326}
+  - component: {fileID: 4057950331069561072}
   m_Layer: 6
   m_Name: Basic Enemy
   m_TagString: Untagged
@@ -293,9 +294,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 14cf719268ebb774fbc0c5f322e057ab, type: 2}
   currentPath: {fileID: 0}
-  maxHealth: 3
   theTarget: {fileID: 0}
   debugEnabled: 0
+--- !u!114 &4057950331069561072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2879866509834691327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f494b8e3b0d1450ea43b1862e57d3721, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reward: 20
 --- !u!1001 &2865927523756528757
 PrefabInstance:
   m_ObjectHideFlags: 0

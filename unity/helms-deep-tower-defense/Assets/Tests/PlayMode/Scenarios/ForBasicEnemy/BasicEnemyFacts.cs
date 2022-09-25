@@ -5,6 +5,7 @@ using Model.Factories;
 using Model.Factories.Camera;
 using MonoBehaviours.AI;
 using MonoBehaviours.Combat;
+using MonoBehaviours.Commerce;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -59,6 +60,15 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var collider = enemy.GetComponent<BoxCollider>();
 
             Assert.NotNull(collider, "collider component exists");
+        }
+        [UnityTest]
+        public IEnumerator BasicEnemy_UsesA_Reward()
+        {
+            var enemy = _prefabSpawner.Spawn();
+            CleanupAtEnd(enemy);
+            TestCameraLookAt(enemy.transform);
+            yield return null;
+            Assert.IsTrue(enemy.TryGetComponent<IRewardMoney>(out _), $"enemy requires IRewardMoney");
         }
 
         [UnityTest]
