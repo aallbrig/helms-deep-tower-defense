@@ -34,12 +34,12 @@ namespace MonoBehaviours.Combat
             if (TeamConfiguration.IsInLayerMask(other.gameObject, TeamConfig.enemies))
             {
                 if (Config.impactEffect) Instantiate(Config.impactEffect);
+                if (other.TryGetComponent<IDamageable>(out _))
+                    DamageableCollided?.Invoke(other.gameObject);
                 Destroy(gameObject);
-                if (other.TryGetComponent<IDamageable>(out var damageable))
-                    DamageableCollided?.Invoke(damageable);
             }
         }
 
-        public event Action<IDamageable> DamageableCollided;
+        public event Action<GameObject> DamageableCollided;
     }
 }

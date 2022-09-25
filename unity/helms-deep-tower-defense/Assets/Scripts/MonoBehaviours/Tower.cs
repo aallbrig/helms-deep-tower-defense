@@ -3,6 +3,7 @@ using CleverCrow.Fluid.BTs.Tasks;
 using CleverCrow.Fluid.BTs.Trees;
 using Model.Combat;
 using MonoBehaviours.Combat;
+using MonoBehaviours.Commerce;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -49,7 +50,16 @@ namespace MonoBehaviours
             var projectileComponent = projectile.GetComponent<Projectile>();
             projectileComponent.config = config.projectileConfig;
             projectileComponent.TeamConfig = _teamConfig;
-            projectileComponent.DamageableCollided += damageable => damageable.Damage(config.damage);
+            projectileComponent.DamageableCollided += damageable =>
+            {
+                damageable.GetComponent<IDamageable>().Damage(config.damage);
+                if (damageable.TryGetComponent<IKillable>(out var killable) &&
+                    damageable.TryGetComponent<IRewardMoney>(out var rewardMoney) &&
+                    killable.IsDead)
+                {
+                    FindObjectOfType<MoneyPurse>().AddReward(rewardMoney);
+                }
+            };
             AttackedTarget?.Invoke(target);
         }
 
@@ -61,18 +71,20 @@ namespace MonoBehaviours
 
             _currentHealth -= damage;
             Damaged?.Invoke(damage);
-            if (_currentHealth <= 0)
-            {
-                _currentHealth = 0;
-                Kill();
-            }
+
+            if (_currentHealth <= 0) Kill();
         }
 
         public float CurrentHealthNormalized() => _currentHealth / MaxHealth;
 
         public event Action Killed;
 
-        public void Kill() => Killed?.Invoke();
+        public bool IsDead => _currentHealth <= 0;
+        public void Kill()
+        {
+            _currentHealth = 0;
+            Killed?.Invoke();
+        }
 
         public float MaxHealth => config.MaxHealth;
 

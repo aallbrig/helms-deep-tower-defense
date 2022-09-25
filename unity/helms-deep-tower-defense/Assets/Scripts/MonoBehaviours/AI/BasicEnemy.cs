@@ -100,6 +100,8 @@ namespace MonoBehaviours.AI
 
         public event Action Killed;
 
+        public bool IsDead => _currentHealth <= 0;
+
         public void Kill()
         {
             Killed?.Invoke();
