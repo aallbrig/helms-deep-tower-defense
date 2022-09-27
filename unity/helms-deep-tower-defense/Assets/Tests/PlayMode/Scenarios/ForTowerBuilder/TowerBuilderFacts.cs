@@ -12,8 +12,8 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
 {
     public class TowerBuilderFacts : ScenarioTest
     {
-        private readonly PrefabSpawner _groundSpawner = new PrefabSpawner("Prefabs/Ground");
         private readonly PrefabSpawner _basicTowerButton = new PrefabSpawner("Prefabs/UI/Buy Basic Tower Button");
+        private readonly PrefabSpawner _groundSpawner = new PrefabSpawner("Prefabs/Ground");
         private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Tower Builder");
         [UnityTest]
         public IEnumerator TowerBuilder_UsesA_TowerBuilderComponent()
@@ -159,6 +159,34 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
             yield return null;
 
             Assert.AreEqual(1, spawnCount);
+        }
+
+        [UnityTest]
+        public IEnumerator TowerBuilder_CanParentSpawnedTowers_IfParentTransformSet()
+        {
+            var pointer = InputSystem.AddDevice<Pointer>();
+            var instance = _prefabSpawner.Spawn();
+            CleanupAtEnd(instance);
+            TestCameraLookAt(instance.transform);
+            CleanupAtEnd(_groundSpawner.Spawn());
+            var buyButtonInstance = _basicTowerButton.Spawn();
+            CleanupAtEnd(buyButtonInstance);
+            var buyButton = buyButtonInstance.GetComponent<TowerBuyButton>();
+
+            yield return null;
+            var dummyParent = new GameObject();
+            Assert.AreEqual(0, dummyParent.transform.childCount, "parent should start with 0 children");
+            var towerBuilder = instance.GetComponent<TowerBuilder>();
+            towerBuilder.parentTransform = dummyParent.transform;
+
+            // Try build two towers in the same location
+            buyButton.button.onClick.Invoke();
+            yield return null;
+            Move(pointer.position, new Vector2(0, 10));
+            PressAndRelease(pointer.press);
+            yield return null;
+
+            Assert.AreEqual(1, dummyParent.transform.childCount, "parent should know about 1 child");
         }
     }
 }

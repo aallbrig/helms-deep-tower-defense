@@ -23,11 +23,12 @@ namespace MonoBehaviours.Factories
         public Transform indicator;
         public LayerMask validBuildLayer;
         public LayerMask obstaclesLayer;
+        public Transform parentTransform;
         public float placementRayLength = 200f;
         [SerializeField] private GameObject activeTower;
         public List<TowerBuyButton> towerBuyButtons = new List<TowerBuyButton>();
-        private readonly Vector3 _activeTowerPreviewLocation = new Vector3(0, 100, 0);
         private readonly List<GameObject> _activeTowerPreviewIndicators = new List<GameObject>();
+        private readonly Vector3 _activeTowerPreviewLocation = new Vector3(0, 100, 0);
         [SerializeReference] private IFsm _builderStateMachine;
         private Ray _indicatorPlacementRay;
         private PlayerInputActions _input;
@@ -99,7 +100,17 @@ namespace MonoBehaviours.Factories
                 else
                     return null;
 
-            var newTower = Instantiate(activeTower, indicator.transform.position, indicator.transform.rotation);
+            GameObject newTower;
+            if (parentTransform != null)
+            {
+                newTower = Instantiate(activeTower, parentTransform);
+                newTower.transform.position = indicator.transform.position;
+                newTower.transform.rotation = indicator.transform.rotation;
+            }
+            else
+            {
+                newTower = Instantiate(activeTower, indicator.transform.position, indicator.transform.rotation);
+            }
             Spawned?.Invoke(newTower);
             ResetActiveTower();
             return newTower;
@@ -154,7 +165,7 @@ namespace MonoBehaviours.Factories
         private void ResetActiveTowerPreviews()
         {
             foreach (var towerInstance in _activeTowerPreviewIndicators.Where(_ =>
-                _.transform.position != _activeTowerPreviewLocation))
+                         _.transform.position != _activeTowerPreviewLocation))
                 towerInstance.transform.position = _activeTowerPreviewLocation;
         }
         private GameObject GetActiveTowerPreview()
