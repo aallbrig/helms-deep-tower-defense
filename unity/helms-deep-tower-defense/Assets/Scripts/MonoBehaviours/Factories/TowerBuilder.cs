@@ -100,6 +100,15 @@ namespace MonoBehaviours.Factories
                 else
                     return null;
 
+            var newTower = CreateNewTower();
+
+            Spawned?.Invoke(newTower);
+            ResetActiveTower();
+            return newTower;
+        }
+
+        private GameObject CreateNewTower()
+        {
             GameObject newTower;
             if (parentTransform != null)
             {
@@ -111,8 +120,6 @@ namespace MonoBehaviours.Factories
             {
                 newTower = Instantiate(activeTower, indicator.transform.position, indicator.transform.rotation);
             }
-            Spawned?.Invoke(newTower);
-            ResetActiveTower();
             return newTower;
         }
         private bool TowerNotPlaceable()
