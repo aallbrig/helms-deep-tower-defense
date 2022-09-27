@@ -175,6 +175,7 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
 
             yield return null;
             var dummyParent = new GameObject();
+            CleanupAtEnd(dummyParent);
             Assert.AreEqual(0, dummyParent.transform.childCount, "parent should start with 0 children");
             var towerBuilder = instance.GetComponent<TowerBuilder>();
             towerBuilder.parentTransform = dummyParent.transform;

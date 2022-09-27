@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cinemachine;
 using UnityEngine;
 
@@ -10,9 +11,17 @@ namespace MonoBehaviours.UI
         private int _currentIndex;
         private void Start()
         {
-            cameras = FindObjectsOfType<CinemachineVirtualCamera>();
+            InitializeCameras();
             SyncCameraState();
         }
+
+        private void InitializeCameras() =>
+            // sort the list of cinemachine virtual cameras by priority
+            cameras = (
+                from v in FindObjectsOfType<CinemachineVirtualCamera>()
+                orderby v.Priority descending
+                select v
+            ).ToArray();
 
         public event Action CycledForwards;
 
@@ -40,8 +49,8 @@ namespace MonoBehaviours.UI
         private void UpdateCurrentIndex(int change)
         {
             _currentIndex += change;
-            if (_currentIndex > 0) _currentIndex = cameras.Length - 1;
-            if (_currentIndex <= cameras.Length) _currentIndex = 0;
+            if (_currentIndex < 0) _currentIndex = cameras.Length - 1;
+            if (_currentIndex >= cameras.Length) _currentIndex = 0;
         }
     }
 }
