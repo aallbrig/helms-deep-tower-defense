@@ -16,6 +16,7 @@ namespace MonoBehaviours.Factories
         {
             _transform = transform;
             path ??= FindObjectOfType<Path>();
+            pathFollower ??= new GameObject();
         }
 
         [ContextMenu("Spawn")]

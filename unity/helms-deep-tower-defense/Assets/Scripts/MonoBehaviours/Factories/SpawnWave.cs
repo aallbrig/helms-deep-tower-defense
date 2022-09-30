@@ -7,11 +7,13 @@ namespace MonoBehaviours.Factories
 {
     public class SpawnWave : MonoBehaviour
     {
+        public event Action WaveCompleted;
         public WaveConfiguration config;
         public PathFollowerSpawner spawner;
         private ISpawner _spawner;
         private float _timeOfLastSpawn;
         private int _currentCount;
+        private bool _waveComplete = false;
         private WaveConfiguration _configCopy;
 
         private void Start()
@@ -23,13 +25,19 @@ namespace MonoBehaviours.Factories
 
         private void Update()
         {
-            if (_spawner == null || _currentCount > config.spawnCount) return;
+            if (_spawner == null) return;
+            if (_currentCount >= config.spawnCount) return;
 
             if (Time.time - _timeOfLastSpawn >= config.delayInSeconds)
             {
                 _timeOfLastSpawn = Time.time;
                 _spawner.Spawn();
                 _currentCount++;
+                if (_currentCount >= config.spawnCount)
+                {
+                    _waveComplete = true;
+                    WaveCompleted?.Invoke();
+                }
             }
         }
 

@@ -14,7 +14,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 {
     public class BasicEnemyFacts: ScenarioTest
     {
-        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Basic Enemy");
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Enemies/Basic Enemy");
 
         [UnityTest]
         public IEnumerator BasicEnemy_UsesA_Animator()

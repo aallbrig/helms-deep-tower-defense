@@ -1,4 +1,7 @@
 ﻿using System;
+using Model.Combat;
+using Model.Factories;
+using MonoBehaviours.Factories;
 using UnityEngine;
 
 namespace MonoBehaviours.Systems
@@ -7,8 +10,12 @@ namespace MonoBehaviours.Systems
     {
         public event Action GameIsOver;
         public event Action AllCastlesDestroyed;
+        public event Action AllWavesSpawnsCompleted;
+        public event Action AllEnemiesKilled;
         public event Action<GameObject> CastleRegistered;
         public int castlesAlive = 0;
+        public int enemies = 0;
+        public int waves = 0;
 
         private void Start()
         {
@@ -19,6 +26,42 @@ namespace MonoBehaviours.Systems
                 castlesAlive++;
                 castleComponent.Killed += OnCastleKilled;
                 CastleRegistered?.Invoke(castleComponent.gameObject);
+            }
+            foreach (var spawner in FindObjectsOfType<PathFollowerSpawner>())
+            {
+                spawner.Spawned += spawnedGameObject =>
+                {
+                    if (spawnedGameObject.TryGetComponent<IKillable>(out var killable))
+                    {
+                        enemies++;
+                        killable.Killed += OnKillableKilled;
+                    }
+                };
+                if (spawner.gameObject.TryGetComponent<SpawnWave>(out var spawnWave))
+                {
+                    waves++;
+                    spawnWave.WaveCompleted += OnWaveCompleted;
+                }
+            }
+        }
+        private void OnWaveCompleted()
+        {
+            waves--;
+            if (waves == 0) AllWavesSpawnsCompleted?.Invoke();
+            if (GoodGuysWinCondition())
+            {
+                GameIsOver?.Invoke();
+            }
+        }
+        private bool GoodGuysWinCondition() => waves <= 0 && enemies <= 0;
+
+        private void OnKillableKilled()
+        {
+            enemies--;
+            if (enemies == 0) AllEnemiesKilled?.Invoke();
+            if (GoodGuysWinCondition())
+            {
+                GameIsOver?.Invoke();
             }
         }
 
