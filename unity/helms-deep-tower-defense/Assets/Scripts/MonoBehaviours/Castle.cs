@@ -33,10 +33,7 @@ namespace MonoBehaviours
 
         public bool IsDead => _currentHealth <= 0;
 
-        public void Kill()
-        {
-            Killed?.Invoke();
-        }
+        public void Kill() => Damage(maxHealth);
         public float CurrentHealthNormalized() => _currentHealth / maxHealth;
     }
 }
