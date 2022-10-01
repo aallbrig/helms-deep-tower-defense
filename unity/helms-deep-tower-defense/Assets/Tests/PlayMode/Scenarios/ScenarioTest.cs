@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Model.Factories.Camera;
 using NUnit.Framework;
 using UnityEngine;
@@ -26,9 +25,8 @@ namespace Tests.PlayMode.Scenarios
         [TearDown]
         protected new void TearDown()
         {
-            Debug.Log("ScenarioTest | TearDown | destroying all game objects in destroy list");
             var remainingGameObjects = Object.FindObjectsOfType<GameObject>();
-            Debug.Log($"ScenarioTest | TearDown | remaining game objects in scene: {remainingGameObjects.Length}");
+            Debug.Log($"ScenarioTest | TearDown | game objects in scene: {remainingGameObjects.Length}");
             foreach (var remainingGameObject in remainingGameObjects)
                 Object.Destroy(remainingGameObject);
         }
