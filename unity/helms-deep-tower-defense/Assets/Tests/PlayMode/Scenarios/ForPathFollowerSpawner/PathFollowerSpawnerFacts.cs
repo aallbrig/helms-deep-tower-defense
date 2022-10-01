@@ -13,7 +13,7 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
     public class PathFollowerSpawnerFacts: ScenarioTest
     {
         private readonly TestCameraSpawner _testCameraSpawner = new TestCameraSpawner(new Vector3(0, 10, -10));
-        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Path Follower Spawner");
+        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Spawners/Path Follower Spawner");
 
         [UnityTest]
         public IEnumerator PathFollowerSpawner_SpawnsGameObjects_AndInjectsPath()
