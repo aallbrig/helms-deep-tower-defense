@@ -16,7 +16,6 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
         public IEnumerator MoneyPurse_Uses_Components()
         {
             var prefabInstance = _prefabSpawner.Spawn();
-            CleanupAtEnd(prefabInstance);
             TestCameraLookAt(prefabInstance.transform);
             yield return null;
 
@@ -27,7 +26,6 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
         public IEnumerator MoneyPurse_BroadcastsCurrentAmount_Initially()
         {
             var prefabInstance = _prefabSpawner.Spawn();
-            CleanupAtEnd(prefabInstance);
             TestCameraLookAt(prefabInstance.transform);
             var moneyPurseComponent = prefabInstance.GetComponent<MoneyPurse>();
             int recordedMoney = default;
@@ -43,7 +41,6 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
         public IEnumerator MoneyPurse_CanTellYou_IfYouCanAfford()
         {
             var prefabInstance = _prefabSpawner.Spawn();
-            CleanupAtEnd(prefabInstance);
             TestCameraLookAt(prefabInstance.transform);
             var moneyPurseComponent = prefabInstance.GetComponent<MoneyPurse>();
             var dummyCostable = new GameObject();
@@ -64,7 +61,6 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
         public IEnumerator MoneyPurse_AllowsPlayer_ToPurchase()
         {
             var prefabInstance = _prefabSpawner.Spawn();
-            CleanupAtEnd(prefabInstance);
             TestCameraLookAt(prefabInstance.transform);
             var moneyPurseComponent = prefabInstance.GetComponent<MoneyPurse>();
             var purchased = false;
@@ -84,7 +80,6 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
         public IEnumerator MoneyPurse_AllowsPlayers_ToEarnRewardMoney()
         {
             var prefabInstance = _prefabSpawner.Spawn();
-            CleanupAtEnd(prefabInstance);
             TestCameraLookAt(prefabInstance.transform);
             var moneyPurseComponent = prefabInstance.GetComponent<MoneyPurse>();
             var addedReward = false;
@@ -105,10 +100,8 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
         public IEnumerator MoneyPurse_CanBeRendered_InGUI()
         {
             var prefabInstance = _prefabSpawner.Spawn();
-            CleanupAtEnd(prefabInstance);
             TestCameraLookAt(prefabInstance.transform);
             var moneyDisplay = _displayGuiSpawner.Spawn();
-            CleanupAtEnd(moneyDisplay);
             var moneyPurseComponent = prefabInstance.GetComponent<MoneyPurse>();
             var moneyPurseDisplayComponent = moneyDisplay.GetComponent<MoneyPurseDisplay>();
             moneyPurseDisplayComponent.moneyPurse = moneyPurseComponent;
@@ -117,14 +110,12 @@ namespace Tests.PlayMode.Scenarios.ForMoneyPurse
 
             Assert.AreEqual("Gold 0", moneyPurseDisplayComponent.Text());
             var dummyReward = new GameObject();
-            CleanupAtEnd(dummyReward);
             var rewardComponent = dummyReward.AddComponent<Reward>();
             rewardComponent.reward = 10;
             moneyPurseComponent.AddReward(rewardComponent);
             Assert.AreEqual("Gold 10", moneyPurseDisplayComponent.Text());
 
             var dummyCost = new GameObject();
-            CleanupAtEnd(dummyCost);
             var costComponent = dummyReward.AddComponent<Cost>();
             costComponent.price = 10;
             moneyPurseComponent.Purchase(costComponent);

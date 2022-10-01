@@ -17,7 +17,6 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_UsesA_CastleComponent()
         {
             var castle = _prefabSpawner.Spawn();
-            CleanupAtEnd(castle);
             TestCameraLookAt(castle.transform);
             yield return null;
 
@@ -29,7 +28,6 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_UsesA_Trigger()
         {
             var castle = _prefabSpawner.Spawn();
-            CleanupAtEnd(castle);
             TestCameraLookAt(castle.transform);
             yield return null;
 
@@ -42,7 +40,6 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_CanBe_Attacked()
         {
             var castle = _prefabSpawner.Spawn();
-            CleanupAtEnd(castle);
             TestCameraLookAt(castle.transform);
             var castleComponent = castle.GetComponent<MonoBehaviours.Castle>();
             var damaged = false;
@@ -58,7 +55,6 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_CanBe_Killed()
         {
             var castle = _prefabSpawner.Spawn();
-            CleanupAtEnd(castle);
             TestCameraLookAt(castle.transform);
             var castleComponent = castle.GetComponent<MonoBehaviours.Castle>();
             var killed = false;
@@ -74,13 +70,12 @@ namespace Tests.PlayMode.Scenarios.ForCastle
         public IEnumerator Castle_CanAssign_AttackPoint()
         {
             var castle = _prefabSpawner.Spawn();
-            CleanupAtEnd(castle);
             TestCameraLookAt(castle.transform);
             var component = castle.GetComponentInChildren<IAssignAttackPoints>();
             yield return null;
 
             var attackPointTransform = component.AssignAttackPoint();
-            
+
             Assert.NotNull(attackPointTransform);
         }
     }

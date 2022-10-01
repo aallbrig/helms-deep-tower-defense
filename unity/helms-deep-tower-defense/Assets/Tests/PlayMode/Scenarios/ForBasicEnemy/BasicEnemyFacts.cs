@@ -20,7 +20,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_UsesA_Animator()
         {
             var enemy = _prefabSpawner.Spawn();
-            CleanupAtEnd(enemy);
             TestCameraLookAt(enemy.transform);
             yield return null;
 
@@ -38,7 +37,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_UsesA_RigidBody()
         {
             var enemy = _prefabSpawner.Spawn();
-            CleanupAtEnd(enemy);
             TestCameraLookAt(enemy.transform);
             yield return null;
 
@@ -53,7 +51,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_UsesA_Collider()
         {
             var enemy = _prefabSpawner.Spawn();
-            CleanupAtEnd(enemy);
             TestCameraLookAt(enemy.transform);
             yield return null;
 
@@ -65,7 +62,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_UsesA_Reward()
         {
             var enemy = _prefabSpawner.Spawn();
-            CleanupAtEnd(enemy);
             TestCameraLookAt(enemy.transform);
             yield return null;
             Assert.IsTrue(enemy.TryGetComponent<IRewardMoney>(out _), $"enemy requires IRewardMoney");
@@ -77,7 +73,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var damageableDiscovered = false;
             var damaged = false;
             var enemy = _prefabSpawner.Spawn();
-            CleanupAtEnd(enemy);
             TestCameraLookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().DiscoveredDamageable += _ => damageableDiscovered = true;
 
@@ -91,7 +86,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var collider = mockDamageable.AddComponent<BoxCollider>();
             collider.size = new Vector3(3, 3, 3);
             collider.isTrigger = true;
-            CleanupAtEnd(mockDamageable);
 
             yield return new WaitForSeconds(0.1f);
 
@@ -104,7 +98,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         {
             var damageableForgotten = false;
             var enemy = _prefabSpawner.Spawn();
-            CleanupAtEnd(enemy);
             TestCameraLookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().ForgotDamageable += _ => damageableForgotten = true;
 
@@ -117,7 +110,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var collider = mockDamageable.AddComponent<BoxCollider>();
             collider.size = new Vector3(3, 3, 3);
             collider.isTrigger = true;
-            CleanupAtEnd(mockDamageable);
             yield return new WaitForSeconds(0.1f);
 
             mockDamageable.transform.position = enemy.transform.position + new Vector3(0, 0, 100);
@@ -131,7 +123,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         {
             var attackPointAcquired = false;
             var enemy = _prefabSpawner.Spawn();
-            CleanupAtEnd(enemy);
             TestCameraLookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().AttackPointAcquired += _ => attackPointAcquired = true;
 
@@ -144,7 +135,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var collider = mockAssignAttackPoint.AddComponent<BoxCollider>();
             collider.size = new Vector3(3, 3, 3);
             collider.isTrigger = true;
-            CleanupAtEnd(mockAssignAttackPoint);
             yield return null;
 
             mockAssignAttackPoint.transform.position = enemy.transform.position;

@@ -16,7 +16,6 @@ namespace Tests.PlayMode.Scenarios.ForProjectiles
         public IEnumerator Projectile_UsesA_RigidBodyComponent()
         {
             var projectile = _prefabSpawner.Spawn();
-            CleanupAtEnd(projectile);
             TestCameraLookAt(projectile.transform);
             yield return null;
             var rigidBody = projectile.GetComponent<Rigidbody>();
@@ -27,7 +26,6 @@ namespace Tests.PlayMode.Scenarios.ForProjectiles
         public IEnumerator Projectile_UsesA_ColliderComponent()
         {
             var projectile = _prefabSpawner.Spawn();
-            CleanupAtEnd(projectile);
             TestCameraLookAt(projectile.transform);
             yield return null;
             var collider = projectile.GetComponent<SphereCollider>();
@@ -38,7 +36,6 @@ namespace Tests.PlayMode.Scenarios.ForProjectiles
         public IEnumerator Projectile_UsesA_ProjectileComponent()
         {
             var projectile = _prefabSpawner.Spawn();
-            CleanupAtEnd(projectile);
             TestCameraLookAt(projectile.transform);
             yield return null;
             var projectileComponent = projectile.GetComponent<Projectile>();
@@ -48,7 +45,6 @@ namespace Tests.PlayMode.Scenarios.ForProjectiles
         public IEnumerator Projectile_MovesForward()
         {
             var projectile = _prefabSpawner.Spawn();
-            CleanupAtEnd(projectile);
             TestCameraLookAt(projectile.transform);
             var previousPosition = projectile.transform.localPosition;
             yield return null;
@@ -63,7 +59,6 @@ namespace Tests.PlayMode.Scenarios.ForProjectiles
             var projectileConfiguration = ScriptableObject.CreateInstance<ProjectileConfiguration>();
             projectileConfiguration.projectileSpeed = 69f;
             var projectile = _prefabSpawner.Spawn();
-            CleanupAtEnd(projectile);
             TestCameraLookAt(projectile.transform);
             var projectileComponent = projectile.GetComponent<Projectile>();
             yield return null;

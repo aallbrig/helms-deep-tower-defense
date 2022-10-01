@@ -1,6 +1,5 @@
 ﻿using System;
 using Model.Combat;
-using Model.Factories;
 using MonoBehaviours.Factories;
 using UnityEngine;
 
@@ -8,6 +7,7 @@ namespace MonoBehaviours.Systems
 {
     public class GameReferee : MonoBehaviour
     {
+        public event Action GameHasStarted;
         public event Action GameIsOver;
         public event Action AllCastlesDestroyed;
         public event Action AllWavesSpawnsCompleted;

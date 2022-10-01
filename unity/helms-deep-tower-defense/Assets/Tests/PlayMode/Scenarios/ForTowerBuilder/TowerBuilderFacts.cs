@@ -19,7 +19,6 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
         public IEnumerator TowerBuilder_UsesA_TowerBuilderComponent()
         {
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
 
             yield return null;
@@ -33,13 +32,11 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
         public IEnumerator TowerBuilder_DetectsAll_TowerBuyButtons()
         {
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
             var dummyBuyButton = new GameObject();
             dummyBuyButton.AddComponent<Team>();
             var buyButton = dummyBuyButton.AddComponent<TowerBuyButton>();
             buyButton.prefab = new GameObject();
-            CleanupAtEnd(dummyBuyButton);
 
             yield return null;
             var towerBuilder = instance.GetComponent<TowerBuilder>();
@@ -54,13 +51,11 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
         public IEnumerator TowerBuilder_HelpsPlayer_WithAnIndicator()
         {
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
             var dummyBuyButton = new GameObject();
             dummyBuyButton.AddComponent<Team>();
             var buyButton = dummyBuyButton.AddComponent<TowerBuyButton>();
             buyButton.prefab = new GameObject();
-            CleanupAtEnd(dummyBuyButton);
 
             yield return null;
             var towerBuilder = instance.GetComponent<TowerBuilder>();
@@ -77,14 +72,12 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
         {
             var pointer = InputSystem.AddDevice<Pointer>();
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
-            CleanupAtEnd(_groundSpawner.Spawn());
+            _groundSpawner.Spawn();
             var dummyBuyButton = new GameObject();
             dummyBuyButton.AddComponent<Team>();
             var buyButton = dummyBuyButton.AddComponent<TowerBuyButton>();
             buyButton.prefab = new GameObject();
-            CleanupAtEnd(dummyBuyButton);
 
             yield return null;
             var towerBuilder = instance.GetComponent<TowerBuilder>();
@@ -103,16 +96,13 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
         {
             var pointer = InputSystem.AddDevice<Pointer>();
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
-            CleanupAtEnd(_groundSpawner.Spawn());
             var dummyBuyButton = new GameObject();
             dummyBuyButton.AddComponent<Team>();
             var buyButton = dummyBuyButton.AddComponent<TowerBuyButton>();
             var buyButtonPrefab = new GameObject();
             buyButtonPrefab.name = "test tower";
             buyButton.prefab = buyButtonPrefab;
-            CleanupAtEnd(dummyBuyButton);
 
             yield return null;
             var towerBuilder = instance.GetComponent<TowerBuilder>();
@@ -132,11 +122,9 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
         {
             var pointer = InputSystem.AddDevice<Pointer>();
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
-            CleanupAtEnd(_groundSpawner.Spawn());
+            _groundSpawner.Spawn();
             var buyButtonInstance = _basicTowerButton.Spawn();
-            CleanupAtEnd(buyButtonInstance);
             var buyButton = buyButtonInstance.GetComponent<TowerBuyButton>();
 
             yield return null;
@@ -166,16 +154,12 @@ namespace Tests.PlayMode.Scenarios.ForTowerBuilder
         {
             var pointer = InputSystem.AddDevice<Pointer>();
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
-            CleanupAtEnd(_groundSpawner.Spawn());
             var buyButtonInstance = _basicTowerButton.Spawn();
-            CleanupAtEnd(buyButtonInstance);
             var buyButton = buyButtonInstance.GetComponent<TowerBuyButton>();
 
             yield return null;
             var dummyParent = new GameObject();
-            CleanupAtEnd(dummyParent);
             Assert.AreEqual(0, dummyParent.transform.childCount, "parent should start with 0 children");
             var towerBuilder = instance.GetComponent<TowerBuilder>();
             towerBuilder.parentTransform = dummyParent.transform;

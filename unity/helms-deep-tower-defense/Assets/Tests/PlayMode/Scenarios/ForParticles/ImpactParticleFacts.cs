@@ -15,7 +15,6 @@ namespace Tests.PlayMode.Scenarios.ForParticles
         public IEnumerator ImpactParticles_UsesA_ParticleSystem()
         {
             var prefabInstance = _prefabSpawner.Spawn();
-            CleanupAtEnd(prefabInstance);
             TestCameraLookAt(prefabInstance.transform);
             yield return null;
 

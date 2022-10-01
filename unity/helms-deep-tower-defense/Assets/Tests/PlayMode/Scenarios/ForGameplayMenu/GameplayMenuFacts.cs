@@ -14,7 +14,6 @@ namespace Tests.PlayMode.Scenarios.ForGameplayMenu
         public IEnumerator GameplayMenu_UsesA_Canvas()
         {
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
 
             yield return null;

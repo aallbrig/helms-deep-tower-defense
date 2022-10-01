@@ -14,7 +14,6 @@ namespace Tests.PlayMode.Scenarios.ForGameReferee
         public IEnumerator GameReferee_DeclaresGameLost_WhenAllCastlesAreDestroyed()
         {
             var referee = _refereeSpawner.Spawn();
-            CleanupAtEnd(referee);
             TestCameraLookAt(referee.transform);
             var refereeComponent = referee.GetComponent<GameReferee>();
             var allCastlesDestroyedEventCalled = false;
@@ -24,9 +23,6 @@ namespace Tests.PlayMode.Scenarios.ForGameReferee
             var castleGameObject1 = _castleSpawner.Spawn();
             var castleGameObject2 = _castleSpawner.Spawn();
             var castleGameObject3 = _castleSpawner.Spawn();
-            CleanupAtEnd(castleGameObject1);
-            CleanupAtEnd(castleGameObject2);
-            CleanupAtEnd(castleGameObject3);
             yield return null;
 
             castleGameObject1.GetComponent<MonoBehaviours.Castle>().Kill();
@@ -40,14 +36,13 @@ namespace Tests.PlayMode.Scenarios.ForGameReferee
         public IEnumerator GameReferee_KnowsAbout_AllCastlesInScene()
         {
             var referee = _refereeSpawner.Spawn();
-            CleanupAtEnd(referee);
             TestCameraLookAt(referee.transform);
             var refereeComponent = referee.GetComponent<GameReferee>();
             var castleRegisteredCounter = 0;
             refereeComponent.CastleRegistered += _ => castleRegisteredCounter++;
-            CleanupAtEnd(_castleSpawner.Spawn());
-            CleanupAtEnd(_castleSpawner.Spawn());
-            CleanupAtEnd(_castleSpawner.Spawn());
+            _castleSpawner.Spawn();
+            _castleSpawner.Spawn();
+            _castleSpawner.Spawn();
             yield return null;
 
             Assert.AreEqual(3, castleRegisteredCounter, "expects the ref to declare how many castles its tracking");

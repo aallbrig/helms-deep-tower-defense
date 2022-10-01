@@ -25,10 +25,9 @@ namespace Tests.PlayMode.Scenarios.ForVictoryMenu
             var victoryMenuComponent = victoryMenu.GetComponent<VictoryMenu>();
             var victoryMenuActivated = false;
             victoryMenuComponent.VictoryMenuActivated += () => victoryMenuActivated = true;
-            CleanupAtEnd(victoryMenu);
-            CleanupAtEnd(_refereeSpawner.Spawn());
-            CleanupAtEnd(_pathSpawner.Spawn());
-            CleanupAtEnd(_pathFollowerSpawnerSpawner.Spawn());
+            _refereeSpawner.Spawn();
+            _pathSpawner.Spawn();
+            _pathFollowerSpawnerSpawner.Spawn();
             yield return null;
 
             foreach (var killable in Object.FindObjectsOfType<MonoBehaviour>().OfType<IKillable>())

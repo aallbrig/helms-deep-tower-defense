@@ -20,7 +20,6 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
         {
             var spawned = false;
             var spawner = _prefabSpawner.Spawn();
-            CleanupAtEnd(spawner);
             TestCameraLookAt(spawner.transform);
             var component = spawner.GetComponent<PathFollowerSpawner>();
             component.Spawned += _ => spawned = true;
@@ -38,7 +37,6 @@ namespace Tests.PlayMode.Scenarios.ForPathFollowerSpawner
         {
             var spawned = false;
             var spawner = _prefabSpawner.Spawn();
-            CleanupAtEnd(spawner);
             TestCameraLookAt(spawner.transform);
             var spawnerComponent = spawner.GetComponent<PathFollowerSpawner>();
             spawnerComponent.Spawned += _ => spawned = true;

@@ -16,7 +16,6 @@ namespace Tests.PlayMode.Scenarios.ForAttackPointsTrigger
         {
             Debug.Log("AttackPointFacts | Setup run");
             _prefabInstance = _prefabSpawner.Spawn();
-            CleanupAtEnd(_prefabInstance);
 
             TestCameraLookAt(_prefabInstance.transform);
         }

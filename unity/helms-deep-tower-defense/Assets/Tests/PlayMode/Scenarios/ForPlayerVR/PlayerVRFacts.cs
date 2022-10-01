@@ -13,7 +13,6 @@ namespace Tests.PlayMode.Scenarios.ForPlayerVR
         public IEnumerator PlayerVR_UsesA_InputController()
         {
             var instance = _instanceSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
             yield return null;
 

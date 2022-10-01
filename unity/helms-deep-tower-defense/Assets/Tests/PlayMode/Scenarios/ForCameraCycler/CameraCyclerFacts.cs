@@ -17,13 +17,12 @@ namespace Tests.PlayMode.Scenarios.ForCameraCycler
         public IEnumerator CameraCycler_DetectsAllCinemachineVirtualCameras_InScene()
         {
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
             var cyclerComponent = instance.GetComponent<CameraCycler>();
 
-            CleanupAtEnd(new GameObject().AddComponent<CinemachineVirtualCamera>().gameObject);
-            CleanupAtEnd(new GameObject().AddComponent<CinemachineVirtualCamera>().gameObject);
-            CleanupAtEnd(new GameObject().AddComponent<CinemachineVirtualCamera>().gameObject);
+            new GameObject().AddComponent<CinemachineVirtualCamera>();
+            new GameObject().AddComponent<CinemachineVirtualCamera>();
+            new GameObject().AddComponent<CinemachineVirtualCamera>();
             yield return null;
 
             Assert.AreEqual(3, cyclerComponent.cameras.Length);
@@ -33,7 +32,6 @@ namespace Tests.PlayMode.Scenarios.ForCameraCycler
         public IEnumerator CameraCycler_CyclesThroughVirtualCameras_ForwardAndBackward()
         {
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
             var forwardsCalled = false;
             var backwardsCalled = false;
@@ -45,9 +43,9 @@ namespace Tests.PlayMode.Scenarios.ForCameraCycler
             Assert.NotNull(forwardButton);
             Assert.NotNull(backButton);
 
-            CleanupAtEnd(new GameObject().AddComponent<CinemachineVirtualCamera>().gameObject);
-            CleanupAtEnd(new GameObject().AddComponent<CinemachineVirtualCamera>().gameObject);
-            CleanupAtEnd(new GameObject().AddComponent<CinemachineVirtualCamera>().gameObject);
+            new GameObject().AddComponent<CinemachineVirtualCamera>();
+            new GameObject().AddComponent<CinemachineVirtualCamera>();
+            new GameObject().AddComponent<CinemachineVirtualCamera>();
             yield return null;
 
             forwardButton.onClick.Invoke();
@@ -61,7 +59,6 @@ namespace Tests.PlayMode.Scenarios.ForCameraCycler
         public IEnumerator CameraCycler_CyclesThroughVirtualCameras_Correctly()
         {
             var instance = _prefabSpawner.Spawn();
-            CleanupAtEnd(instance);
             TestCameraLookAt(instance.transform);
             var forwardButton = instance.transform.Find("Cycle Forward Button").GetComponent<Button>();
             var backButton = instance.transform.Find("Cycle Back Button").GetComponent<Button>();
@@ -71,9 +68,6 @@ namespace Tests.PlayMode.Scenarios.ForCameraCycler
             var camera1 = new GameObject { name = "test camera 1" }.AddComponent<CinemachineVirtualCamera>().gameObject;
             var camera2 = new GameObject { name = "test camera 2" }.AddComponent<CinemachineVirtualCamera>().gameObject;
             var camera3 = new GameObject { name = "test camera 3" }.AddComponent<CinemachineVirtualCamera>().gameObject;
-            CleanupAtEnd(camera1);
-            CleanupAtEnd(camera2);
-            CleanupAtEnd(camera3);
             camera1.GetComponent<CinemachineVirtualCamera>().Priority = 30;
             camera2.GetComponent<CinemachineVirtualCamera>().Priority = 20;
             camera3.GetComponent<CinemachineVirtualCamera>().Priority = 10;

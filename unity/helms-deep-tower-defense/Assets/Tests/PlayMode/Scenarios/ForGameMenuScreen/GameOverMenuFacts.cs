@@ -18,10 +18,8 @@ namespace Tests.PlayMode.Scenarios.ForGameMenuScreen
             var gameOverMenu = gameOverMenuGameObject.GetComponent<GameOverMenu>();
             var gameOverMenuActivated = false;
             gameOverMenu.GameOverMenuIsActivated += () => gameOverMenuActivated = true;
-            CleanupAtEnd(gameOverMenuGameObject);
-            CleanupAtEnd(_gameRefereeSpawner.Spawn());
+            _gameRefereeSpawner.Spawn();
             var castleGameObject = _castleSpawner.Spawn();
-            CleanupAtEnd(castleGameObject);
             TestCameraLookAt(castleGameObject.transform);
             yield return null;
             castleGameObject.GetComponent<MonoBehaviours.Castle>().Kill();
