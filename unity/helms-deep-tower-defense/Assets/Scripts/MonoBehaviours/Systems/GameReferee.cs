@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Model.Combat;
+using Model.Factories;
 using MonoBehaviours.Factories;
 using UnityEngine;
 
@@ -27,7 +29,7 @@ namespace MonoBehaviours.Systems
                 castleComponent.Killed += OnCastleKilled;
                 CastleRegistered?.Invoke(castleComponent.gameObject);
             }
-            foreach (var spawner in FindObjectsOfType<PathFollowerSpawner>())
+            foreach (var spawner in FindObjectsOfType<SpawnWave>())
             {
                 spawner.Spawned += spawnedGameObject =>
                 {

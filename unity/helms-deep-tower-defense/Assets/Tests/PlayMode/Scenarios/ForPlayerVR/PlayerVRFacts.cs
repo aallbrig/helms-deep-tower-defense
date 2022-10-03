@@ -8,7 +8,7 @@ namespace Tests.PlayMode.Scenarios.ForPlayerVR
 {
     public class PlayerVRFacts: ScenarioTest
     {
-        private readonly ISpawner _instanceSpawner = new PrefabSpawner("Prefabs/XR Origin (Player)");
+        private readonly PrefabSpawner _instanceSpawner = new PrefabSpawner("Prefabs/XR Origin (Player)");
 
         public IEnumerator PlayerVR_UsesA_InputController()
         {

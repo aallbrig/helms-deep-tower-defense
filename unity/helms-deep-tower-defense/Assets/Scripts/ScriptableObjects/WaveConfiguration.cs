@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Model.Factories;
 using UnityEngine;
 
@@ -8,8 +9,10 @@ namespace ScriptableObjects
     {
         public int spawnCount = 1;
         public float delayInSeconds = 1f;
+        public List<GameObject> enemies;
 
         public int SpawnCount => spawnCount;
         public float DelayInSeconds => delayInSeconds;
+        public List<GameObject> Prefabs => enemies;
     }
 }

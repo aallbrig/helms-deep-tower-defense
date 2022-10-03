@@ -1,8 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Model.Factories;
-using Model.Factories.Camera;
 using MonoBehaviours.AI;
 using MonoBehaviours.Combat;
 using MonoBehaviours.Commerce;
@@ -14,19 +12,20 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 {
     public class BasicEnemyFacts: ScenarioTest
     {
-        private readonly PrefabSpawner _prefabSpawner = new PrefabSpawner("Prefabs/Enemies/Basic Enemy");
+        private readonly PrefabSpawner _basicEnemySpawner = new PrefabSpawner("Prefabs/Enemies/Basic Enemy");
+        private readonly PrefabSpawner _testPathSpawner = new PrefabSpawner("Prefabs/Paths/Test Path");
 
         [UnityTest]
         public IEnumerator BasicEnemy_UsesA_Animator()
         {
-            var enemy = _prefabSpawner.Spawn();
+            var enemy = _basicEnemySpawner.Spawn();
             TestCameraLookAt(enemy.transform);
             yield return null;
 
             var animatorComponent = enemy.GetComponent<Animator>();
             var animator = animatorComponent.runtimeAnimatorController;
             var animationClips = animator.animationClips;
-            var hasMovementClip = animationClips.ToList().Aggregate(false, (acc, clip) => acc == true ? acc : clip.name == "basic enemy movement");
+            var hasMovementClip = animationClips.ToList().Aggregate(false, (acc, clip) => acc ? acc : clip.name == "basic enemy movement");
 
             Assert.NotNull(animatorComponent, "Animator component exists");
             Assert.NotNull(animator, "Animator has a controller asset");
@@ -36,7 +35,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         [UnityTest]
         public IEnumerator BasicEnemy_UsesA_RigidBody()
         {
-            var enemy = _prefabSpawner.Spawn();
+            var enemy = _basicEnemySpawner.Spawn();
             TestCameraLookAt(enemy.transform);
             yield return null;
 
@@ -50,18 +49,16 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         [UnityTest]
         public IEnumerator BasicEnemy_UsesA_Collider()
         {
-            var enemy = _prefabSpawner.Spawn();
+            var enemy = _basicEnemySpawner.Spawn();
             TestCameraLookAt(enemy.transform);
             yield return null;
 
-            var collider = enemy.GetComponent<BoxCollider>();
-
-            Assert.NotNull(collider, "collider component exists");
+            Assert.NotNull(enemy.GetComponent<BoxCollider>(), "collider component exists");
         }
         [UnityTest]
         public IEnumerator BasicEnemy_UsesA_Reward()
         {
-            var enemy = _prefabSpawner.Spawn();
+            var enemy = _basicEnemySpawner.Spawn();
             TestCameraLookAt(enemy.transform);
             yield return null;
             Assert.IsTrue(enemy.TryGetComponent<IRewardMoney>(out _), $"enemy requires IRewardMoney");
@@ -72,7 +69,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         {
             var damageableDiscovered = false;
             var damaged = false;
-            var enemy = _prefabSpawner.Spawn();
+            var enemy = _basicEnemySpawner.Spawn();
             TestCameraLookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().DiscoveredDamageable += _ => damageableDiscovered = true;
 
@@ -97,7 +94,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_ForgetsA_Damageable_OnTriggerExit()
         {
             var damageableForgotten = false;
-            var enemy = _prefabSpawner.Spawn();
+            var enemy = _basicEnemySpawner.Spawn();
             TestCameraLookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().ForgotDamageable += _ => damageableForgotten = true;
 
@@ -122,7 +119,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
         public IEnumerator BasicEnemy_CanAcquireAttackPoint_OnTriggerEnter()
         {
             var attackPointAcquired = false;
-            var enemy = _prefabSpawner.Spawn();
+            var enemy = _basicEnemySpawner.Spawn();
             TestCameraLookAt(enemy.transform);
             enemy.GetComponent<BasicEnemy>().AttackPointAcquired += _ => attackPointAcquired = true;
 
@@ -141,6 +138,22 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             yield return new WaitForSeconds(0.1f);
 
             Assert.IsTrue(attackPointAcquired, "acquired attack point from trigger");
+        }
+
+        [UnityTest]
+        public IEnumerator BasicEnemy_Can_FindTheClosestPath()
+        {
+            var enemy = _basicEnemySpawner.Spawn();
+            var closestPath = _testPathSpawner.Spawn();
+            var furthestPath = _testPathSpawner.Spawn();
+            furthestPath.transform.position = new Vector3(0, 0, 100);
+            closestPath.transform.position = enemy.transform.position;
+            TestCameraLookAt(enemy.transform);
+            yield return null;
+
+            var currentPath = enemy.GetComponent<BasicEnemy>().currentPath;
+            Assert.NotNull(currentPath);
+            Assert.AreSame(closestPath, currentPath.gameObject);
         }
     }
 }

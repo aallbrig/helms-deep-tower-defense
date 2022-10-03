@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnCount: 1
   delayInSeconds: 1
+  enemies:
+  - {fileID: 2879866509834691327, guid: 00e5505e998cc31469f510b161a00177, type: 3}

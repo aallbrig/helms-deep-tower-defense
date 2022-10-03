@@ -5,12 +5,10 @@ using UnityEngine;
 
 namespace MonoBehaviours.Factories
 {
-    public class SpawnWave : MonoBehaviour
+    public class SpawnWave : MonoBehaviour, ISpawner
     {
         public event Action WaveCompleted;
         public WaveConfiguration config;
-        public PathFollowerSpawner spawner;
-        private ISpawner _spawner;
         private float _timeOfLastSpawn;
         private int _currentCount;
         private bool _waveComplete = false;
@@ -18,20 +16,17 @@ namespace MonoBehaviours.Factories
 
         private void Start()
         {
-            if (spawner) _spawner = spawner;
-            _spawner ??= GetComponent<ISpawner>();
             ResetWaveState();
         }
 
         private void Update()
         {
-            if (_spawner == null) return;
             if (_currentCount >= config.spawnCount) return;
 
             if (Time.time - _timeOfLastSpawn >= config.delayInSeconds)
             {
                 _timeOfLastSpawn = Time.time;
-                _spawner.Spawn();
+                WaveSpawn();
                 _currentCount++;
                 if (_currentCount >= config.spawnCount)
                 {
@@ -54,6 +49,16 @@ namespace MonoBehaviours.Factories
         {
             _timeOfLastSpawn = Time.time - config.delayInSeconds;
             _currentCount = 0;
+        }
+
+        public event Action<GameObject> Spawned;
+
+        public void WaveSpawn()
+        {
+            config.enemies.ForEach(prefab =>
+            {
+                Spawned?.Invoke(Instantiate(prefab));
+            });
         }
     }
 }

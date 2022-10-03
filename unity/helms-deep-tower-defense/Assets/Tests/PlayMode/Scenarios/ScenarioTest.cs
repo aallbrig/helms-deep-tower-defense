@@ -34,6 +34,8 @@ namespace Tests.PlayMode.Scenarios
         [UnityTearDown]
         protected IEnumerator UnityTearDown()
         {
+            if (SceneManager.sceneCount > 1)
+                yield return SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
             for (int i = SceneManager.sceneCount - 1; i > 0; i--)
             {
                 Debug.Log("ScenarioTest | UnityTearDown | Unloading added scenes");
