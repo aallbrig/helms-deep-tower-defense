@@ -57,7 +57,7 @@ namespace MonoBehaviours.Factories
         {
             config.enemies.ForEach(prefab =>
             {
-                Spawned?.Invoke(Instantiate(prefab));
+                Spawned?.Invoke(Instantiate(prefab, transform.position, transform.rotation));
             });
         }
     }
