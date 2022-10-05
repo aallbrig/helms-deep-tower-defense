@@ -22,18 +22,15 @@ namespace Tests.PlayMode.Scenarios
             _testCamera = _testCameraSpawner.Spawn();
         }
 
-        [TearDown]
-        protected new void TearDown()
+        [UnityTearDown]
+        protected IEnumerator UnityTearDown()
         {
             var remainingGameObjects = Object.FindObjectsOfType<GameObject>(true);
             Debug.Log($"ScenarioTest | TearDown | game objects in scene: {remainingGameObjects.Length}");
             foreach (var remainingGameObject in remainingGameObjects)
                 Object.Destroy(remainingGameObject);
-        }
+            yield return null; // allow end of frame, so the game objects really get cleaned up
 
-        [UnityTearDown]
-        protected IEnumerator UnityTearDown()
-        {
             if (SceneManager.sceneCount > 1)
                 yield return SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
             for (var i = SceneManager.sceneCount - 1; i > 0; i--)
