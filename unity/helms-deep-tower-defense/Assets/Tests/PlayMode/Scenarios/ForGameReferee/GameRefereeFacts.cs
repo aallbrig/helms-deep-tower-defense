@@ -10,6 +10,7 @@ namespace Tests.PlayMode.Scenarios.ForGameReferee
     {
         private readonly PrefabSpawner _castleSpawner = new PrefabSpawner("Prefabs/Castle");
         private readonly PrefabSpawner _refereeSpawner = new PrefabSpawner("Prefabs/Systems/Game Referee");
+        private readonly PrefabSpawner _waveSpawnerSpawner = new PrefabSpawner("Prefabs/Spawners/Test Wave");
         [UnityTest]
         public IEnumerator GameReferee_DeclaresGameLost_WhenAllCastlesAreDestroyed()
         {
@@ -32,31 +33,37 @@ namespace Tests.PlayMode.Scenarios.ForGameReferee
             Assert.IsTrue(allCastlesDestroyedEventCalled);
             Assert.IsTrue(gameIsOverEventCalled);
         }
+
         [UnityTest]
-        public IEnumerator GameReferee_TracksEvenInactiveCastles_InTheScene()
+        public IEnumerator GameReferee_TracksInactiveCastles_InTheScene()
         {
             var referee = _refereeSpawner.Spawn();
             TestCameraLookAt(referee.transform);
             var refereeComponent = referee.GetComponent<GameReferee>();
-            var allCastlesDestroyedEventCalled = false;
-            refereeComponent.AllCastlesDestroyed += () => allCastlesDestroyedEventCalled = true;
-            var gameIsOverEventCalled = false;
-            refereeComponent.GameIsOver += () => gameIsOverEventCalled = true;
-            var castleGameObject1 = _castleSpawner.Spawn();
-            var castleGameObject2 = _castleSpawner.Spawn();
+            _castleSpawner.Spawn();
+            _castleSpawner.Spawn();
             var inactivateCastleGameObject = _castleSpawner.Spawn();
             inactivateCastleGameObject.SetActive(false);
             yield return null;
 
             Assert.AreEqual(3, refereeComponent.castlesAlive);
-            inactivateCastleGameObject.SetActive(true);
-            castleGameObject1.GetComponent<MonoBehaviours.Castle>().Kill();
-            castleGameObject2.GetComponent<MonoBehaviours.Castle>().Kill();
-            inactivateCastleGameObject.GetComponent<MonoBehaviours.Castle>().Kill();
-
-            Assert.IsTrue(allCastlesDestroyedEventCalled);
-            Assert.IsTrue(gameIsOverEventCalled);
         }
+
+        [UnityTest]
+        public IEnumerator GameReferee_TracksInactiveSpawners_InTheScene()
+        {
+            var referee = _refereeSpawner.Spawn();
+            TestCameraLookAt(referee.transform);
+            var refereeComponent = referee.GetComponent<GameReferee>();
+            _waveSpawnerSpawner.Spawn();
+            _waveSpawnerSpawner.Spawn();
+            var inactivateWaveSpawnerGameObject = _waveSpawnerSpawner.Spawn();
+            inactivateWaveSpawnerGameObject.SetActive(false);
+            yield return null;
+
+            Assert.AreEqual(3, refereeComponent.waves);
+        }
+
         [UnityTest]
         public IEnumerator GameReferee_KnowsAbout_AllCastlesInScene()
         {

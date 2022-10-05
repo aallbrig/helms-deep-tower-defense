@@ -10,7 +10,6 @@ namespace MonoBehaviours.Systems
         public int castlesAlive;
         public int enemies;
         public int waves;
-
         private void Start()
         {
             AllCastlesDestroyed += () => GameIsOver?.Invoke();
@@ -21,9 +20,11 @@ namespace MonoBehaviours.Systems
                 castleComponent.Killed += OnCastleKilled;
                 CastleRegistered?.Invoke(castleComponent.gameObject);
             }
-            foreach (var spawner in FindObjectsOfType<SpawnWave>())
+            foreach (var spawnWave in FindObjectsOfType<SpawnWave>(true))
             {
-                spawner.Spawned += spawnedGameObject =>
+                waves++;
+                spawnWave.WaveCompleted += OnWaveCompleted;
+                spawnWave.Spawned += spawnedGameObject =>
                 {
                     if (spawnedGameObject.TryGetComponent<IKillable>(out var killable))
                     {
@@ -31,13 +32,10 @@ namespace MonoBehaviours.Systems
                         killable.Killed += OnKillableKilled;
                     }
                 };
-                if (spawner.gameObject.TryGetComponent<SpawnWave>(out var spawnWave))
-                {
-                    waves++;
-                    spawnWave.WaveCompleted += OnWaveCompleted;
-                }
             }
         }
+
+        private void OnEnable() => GameHasStarted?.Invoke();
 
         public event Action GameHasStarted;
 
