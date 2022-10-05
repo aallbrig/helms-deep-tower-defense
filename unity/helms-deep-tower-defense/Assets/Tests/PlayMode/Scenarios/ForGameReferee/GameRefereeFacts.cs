@@ -6,10 +6,10 @@ using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.Scenarios.ForGameReferee
 {
-    public class GameRefereeFacts: ScenarioTest
+    public class GameRefereeFacts : ScenarioTest
     {
-        private readonly PrefabSpawner _refereeSpawner = new PrefabSpawner("Prefabs/Systems/Game Referee");
         private readonly PrefabSpawner _castleSpawner = new PrefabSpawner("Prefabs/Castle");
+        private readonly PrefabSpawner _refereeSpawner = new PrefabSpawner("Prefabs/Systems/Game Referee");
         [UnityTest]
         public IEnumerator GameReferee_DeclaresGameLost_WhenAllCastlesAreDestroyed()
         {
@@ -28,6 +28,31 @@ namespace Tests.PlayMode.Scenarios.ForGameReferee
             castleGameObject1.GetComponent<MonoBehaviours.Castle>().Kill();
             castleGameObject2.GetComponent<MonoBehaviours.Castle>().Kill();
             castleGameObject3.GetComponent<MonoBehaviours.Castle>().Kill();
+
+            Assert.IsTrue(allCastlesDestroyedEventCalled);
+            Assert.IsTrue(gameIsOverEventCalled);
+        }
+        [UnityTest]
+        public IEnumerator GameReferee_TracksEvenInactiveCastles_InTheScene()
+        {
+            var referee = _refereeSpawner.Spawn();
+            TestCameraLookAt(referee.transform);
+            var refereeComponent = referee.GetComponent<GameReferee>();
+            var allCastlesDestroyedEventCalled = false;
+            refereeComponent.AllCastlesDestroyed += () => allCastlesDestroyedEventCalled = true;
+            var gameIsOverEventCalled = false;
+            refereeComponent.GameIsOver += () => gameIsOverEventCalled = true;
+            var castleGameObject1 = _castleSpawner.Spawn();
+            var castleGameObject2 = _castleSpawner.Spawn();
+            var inactivateCastleGameObject = _castleSpawner.Spawn();
+            inactivateCastleGameObject.SetActive(false);
+            yield return null;
+
+            Assert.AreEqual(3, refereeComponent.castlesAlive);
+            inactivateCastleGameObject.SetActive(true);
+            castleGameObject1.GetComponent<MonoBehaviours.Castle>().Kill();
+            castleGameObject2.GetComponent<MonoBehaviours.Castle>().Kill();
+            inactivateCastleGameObject.GetComponent<MonoBehaviours.Castle>().Kill();
 
             Assert.IsTrue(allCastlesDestroyedEventCalled);
             Assert.IsTrue(gameIsOverEventCalled);
