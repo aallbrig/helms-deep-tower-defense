@@ -25,7 +25,7 @@ namespace Tests.PlayMode.Scenarios
         [TearDown]
         protected new void TearDown()
         {
-            var remainingGameObjects = Object.FindObjectsOfType<GameObject>();
+            var remainingGameObjects = Object.FindObjectsOfType<GameObject>(true);
             Debug.Log($"ScenarioTest | TearDown | game objects in scene: {remainingGameObjects.Length}");
             foreach (var remainingGameObject in remainingGameObjects)
                 Object.Destroy(remainingGameObject);
@@ -36,12 +36,11 @@ namespace Tests.PlayMode.Scenarios
         {
             if (SceneManager.sceneCount > 1)
                 yield return SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
-            for (int i = SceneManager.sceneCount - 1; i > 0; i--)
+            for (var i = SceneManager.sceneCount - 1; i > 0; i--)
             {
                 Debug.Log("ScenarioTest | UnityTearDown | Unloading added scenes");
                 yield return SceneManager.UnloadSceneAsync(i);
             }
         }
-
     }
 }

@@ -7,7 +7,8 @@
         "Scripts",
         "Unity.InputSystem",
         "Unity.InputSystem.TestFramework",
-        "Cinemachine"
+        "Cinemachine",
+        "Unity.Timeline"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
