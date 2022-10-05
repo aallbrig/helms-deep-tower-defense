@@ -10,7 +10,7 @@ using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 {
-    public class BasicEnemyFacts: ScenarioTest
+    public class BasicEnemyFacts : ScenarioTest
     {
         private readonly PrefabSpawner _basicEnemySpawner = new PrefabSpawner("Prefabs/Enemies/Basic Enemy");
         private readonly PrefabSpawner _testPathSpawner = new PrefabSpawner("Prefabs/Paths/Test Path");
@@ -25,7 +25,8 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var animatorComponent = enemy.GetComponent<Animator>();
             var animator = animatorComponent.runtimeAnimatorController;
             var animationClips = animator.animationClips;
-            var hasMovementClip = animationClips.ToList().Aggregate(false, (acc, clip) => acc ? acc : clip.name == "basic enemy movement");
+            var hasMovementClip = animationClips.ToList()
+                .Aggregate(false, (acc, clip) => acc ? acc : clip.name == "basic enemy movement");
 
             Assert.NotNull(animatorComponent, "Animator component exists");
             Assert.NotNull(animator, "Animator has a controller asset");
@@ -43,7 +44,8 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
 
             Assert.NotNull(rigidBodyComponent, "rigid body component exists");
             Assert.IsFalse(rigidBodyComponent.useGravity, "does not use gravity");
-            Assert.IsTrue(rigidBodyComponent.isKinematic, "basic enemies can move through each other (but still be able to trigger a trigger");
+            Assert.IsTrue(rigidBodyComponent.isKinematic,
+                "basic enemies can move through each other (but still be able to trigger a trigger");
         }
 
         [UnityTest]
@@ -61,7 +63,7 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             var enemy = _basicEnemySpawner.Spawn();
             TestCameraLookAt(enemy.transform);
             yield return null;
-            Assert.IsTrue(enemy.TryGetComponent<IRewardMoney>(out _), $"enemy requires IRewardMoney");
+            Assert.IsTrue(enemy.TryGetComponent<IRewardMoney>(out _), "enemy requires IRewardMoney");
         }
 
         [UnityTest]
@@ -138,22 +140,6 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             yield return new WaitForSeconds(0.1f);
 
             Assert.IsTrue(attackPointAcquired, "acquired attack point from trigger");
-        }
-
-        [UnityTest]
-        public IEnumerator BasicEnemy_Can_FindTheClosestPath()
-        {
-            var enemy = _basicEnemySpawner.Spawn();
-            var closestPath = _testPathSpawner.Spawn();
-            var furthestPath = _testPathSpawner.Spawn();
-            furthestPath.transform.position = new Vector3(0, 0, 100);
-            closestPath.transform.position = enemy.transform.position;
-            TestCameraLookAt(enemy.transform);
-            yield return null;
-
-            var currentPath = enemy.GetComponent<BasicEnemy>().currentPath;
-            Assert.NotNull(currentPath);
-            Assert.AreSame(closestPath, currentPath.gameObject);
         }
     }
 }

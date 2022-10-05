@@ -45,28 +45,10 @@ namespace MonoBehaviours.AI
             config ??= ScriptableObject.CreateInstance<EnemyConfiguration>();
             _behaviorTree = config.BuildBehaviorTree(gameObject);
             _lastAttackTime = Time.time - config.AttackDelay;
-            path = currentPath;
             NewTargetAcquired += newTarget => transform.LookAt(newTarget);
             _currentHealth = config.MaxHealth;
         }
-        private void Start()
-        {
-            if (path != null) return;
-            // find all available paths
-            // choose the closest path
-            Path closestPath = null;
-            var closestDistance = 100000f;
-            foreach (var path in FindObjectsOfType<Path>())
-            {
-                var distance = Vector3.Distance(transform.position, path.transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestPath = path;
-                }
-            }
-            if (closestPath != null) path = closestPath;
-        }
+        private void Start() => path = currentPath;
 
         private void Update() => _behaviorTree.Tick();
 
