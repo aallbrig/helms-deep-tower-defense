@@ -29,12 +29,12 @@ namespace Editor.ForMonoBehaviours
                     var screenPosition = _camera.WorldToScreenPoint(aboveTransformPosition);
                     // TODO: if max draw distance, don't draw
                     var distanceFromCamera = screenPosition.z / 20;
-                    var content = new GUIContent { text = $"{name}" };
+                    var content = new GUIContent { text = $"point: {pathPoint.name}" };
                     var style = new GUIStyle
                     {
                         fontSize = (int)Mathf.Lerp(20, 6, distanceFromCamera)
                     };
-                    Handles.Label(transformPosition + new Vector3(0, 2, 0), content, style);
+                    Handles.Label(transformPosition + _aboveGroundOffset, content, style);
                     Handles.DrawWireDisc(aboveTransformPosition, Vector3.up, 0.5f);
 
                     var nextI = i + 1;

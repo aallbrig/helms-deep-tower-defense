@@ -52,17 +52,6 @@ namespace MonoBehaviours.AI
 
         private void Update() => _behaviorTree.Tick();
 
-        private void OnGUI()
-        {
-            var transformPosition = transform.position;
-            var aboveCharacter = new Vector3(transformPosition.x, transformPosition.y + 2, transformPosition.z);
-            var screenPosition = _camera.WorldToScreenPoint(aboveCharacter);
-            if (screenPosition.z > maxDrawDistance) return;
-
-            NamePlateGUI(screenPosition);
-        }
-
-
         private void OnTriggerEnter(Collider other)
         {
             if (_damageable != null) return;
@@ -120,22 +109,6 @@ namespace MonoBehaviours.AI
         {
             Killed?.Invoke();
             Destroy(gameObject);
-        }
-        private void NamePlateGUI(Vector3 screenPosition)
-        {
-            var distanceFromCamera = screenPosition.z / 20;
-            var boxWidth = Mathf.Lerp(100, 20, distanceFromCamera);
-            var boxHeight = Mathf.Lerp(90, 10, distanceFromCamera);
-            var content = new GUIContent
-            {
-                text = $"{name}"
-            };
-            var style = new GUIStyle
-            {
-                fontSize = (int)Mathf.Lerp(20, 6, distanceFromCamera)
-            };
-            var position = new Rect(screenPosition.x, Screen.height - screenPosition.y + 5, boxWidth, boxHeight);
-            GUI.Box(position, content, style);
         }
 
         public event Action<Transform> NewTargetAcquired;
