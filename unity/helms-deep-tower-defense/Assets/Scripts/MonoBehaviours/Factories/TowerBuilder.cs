@@ -183,7 +183,7 @@ namespace MonoBehaviours.Factories
                 towerPreview = Instantiate(activeTower, transform);
                 towerPreview.name = $"{activeTower.name}";
                 if (towerPreview.TryGetComponent<Tower>(out var tower)) tower.enabled = false;
-                if (towerPreview.TryGetComponent<Collider>(out var collider)) collider.enabled = false;
+                if (towerPreview.TryGetComponent<Collider>(out var towerCollider)) towerCollider.enabled = false;
                 foreach (var childCollider in towerPreview.GetComponentsInChildren<Collider>()) childCollider.enabled = false;
                 _activeTowerPreviewIndicators.Add(towerPreview);
             }
