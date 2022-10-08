@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using MonoBehaviours.Containers;
 using UnityEditor;
 using UnityEngine;
@@ -29,3 +30,4 @@ namespace Editor.ForMonoBehaviours.Containers
         public override void OnInspectorGUI() => base.OnInspectorGUI();
     }
 }
+#endif

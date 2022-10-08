@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using MonoBehaviours;
 using UnityEditor;
@@ -51,3 +52,4 @@ namespace Editor.ForMonoBehaviours
         public override void OnInspectorGUI() => base.OnInspectorGUI();
     }
 }
+#endif
