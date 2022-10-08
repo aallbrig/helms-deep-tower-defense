@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: basic tower
   m_EditorClassIdentifier: 
   maxHealth: 3
-  range: 5
+  range: 35
   damage: 1.1
   senseDelay: 0.1
   attackDelay: 0.6667

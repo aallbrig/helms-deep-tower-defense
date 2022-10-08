@@ -145,7 +145,7 @@ namespace MonoBehaviours.Factories
             Debug.Log($"pointer position: {pointerPosition}");
             _indicatorPlacementRay = Camera.main.ScreenPointToRay(pointerPosition);
             if (Physics.Raycast(_indicatorPlacementRay, out var hit, placementRayLength, validBuildLayer))
-                indicator.position = new Vector3(hit.point.x, 0, hit.point.z);
+                indicator.position = hit.point;
 
             indicator.gameObject.SetActive(!TowerNotPlaceable());
         }
