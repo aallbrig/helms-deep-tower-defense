@@ -10,12 +10,14 @@ namespace MonoBehaviours.AI
 {
     public class BasicEnemy : MonoBehaviour, IFollowPath, IDamageable, IHaveHealth, IKillable
     {
+        private static readonly int Speed = Animator.StringToHash("speed");
 
         public float maxDrawDistance = 20f;
         public EnemyConfiguration config;
         public Path currentPath;
         public Transform theTarget;
         public bool debugEnabled;
+        public Animator urukGoblinAnimator;
         private Transform _attackPoint;
 
         private BehaviorTree _behaviorTree;
@@ -141,6 +143,7 @@ namespace MonoBehaviours.AI
                 Target.position,
                 config.MoveSpeed * Time.deltaTime
             );
+            if (urukGoblinAnimator) urukGoblinAnimator.SetFloat(Speed, config.moveSpeed);
             MovedTowardsPosition?.Invoke(Target.position);
             return TaskStatus.Continue;
         }

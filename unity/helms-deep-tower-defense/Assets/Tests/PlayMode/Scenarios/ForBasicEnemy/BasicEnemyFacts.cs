@@ -22,15 +22,19 @@ namespace Tests.PlayMode.Scenarios.ForBasicEnemy
             TestCameraLookAt(enemy.transform);
             yield return null;
 
-            var animatorComponent = enemy.GetComponent<Animator>();
+            var animatorComponent = enemy.GetComponentInChildren<Animator>();
             var animator = animatorComponent.runtimeAnimatorController;
             var animationClips = animator.animationClips;
-            var hasMovementClip = animationClips.ToList()
-                .Aggregate(false, (acc, clip) => acc ? acc : clip.name == "basic enemy movement");
+            var clips = animationClips.ToList();
+            var hasMovementClip = clips
+                .Aggregate(false, (acc, clip) => acc ? acc : clip.name == "Sprint");
+            var hasIdleClip = clips
+                .Aggregate(false, (acc, clip) => acc ? acc : clip.name == "Orc Idle");
 
             Assert.NotNull(animatorComponent, "Animator component exists");
             Assert.NotNull(animator, "Animator has a controller asset");
             Assert.IsTrue(hasMovementClip, "Basic movement animation included in animator");
+            Assert.IsTrue(hasIdleClip, "Idle animation included in animator");
         }
 
         [UnityTest]
