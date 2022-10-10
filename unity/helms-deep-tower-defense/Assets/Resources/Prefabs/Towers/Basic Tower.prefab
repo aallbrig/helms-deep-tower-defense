@@ -370,6 +370,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 777c0cf43648df64f96cfe18a55e1bdc, type: 2}
   firePoint: {fileID: 1335395137709738154}
   turret: {fileID: 154130470660646420}
+  modelAnimator: {fileID: 5812128142546762538}
 --- !u!135 &8242692114043458408
 SphereCollider:
   m_ObjectHideFlags: 0

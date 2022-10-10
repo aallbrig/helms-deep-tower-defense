@@ -14,6 +14,7 @@ namespace MonoBehaviours
         public TowerConfiguration config;
         public Transform firePoint;
         public Transform turret;
+        public Animator modelAnimator;
         [SerializeField] private BehaviorTree behaviorTree;
         private Collider[] _collidersWithinRange;
         private float _currentHealth;
@@ -48,6 +49,7 @@ namespace MonoBehaviours
             if (config.shotEffect) Instantiate(config.shotEffect, firePoint.position, firePoint.rotation);
             var projectile = Instantiate(config.projectilePrefab, firePoint.position, firePoint.rotation);
             var projectileComponent = projectile.GetComponent<Projectile>();
+            if (modelAnimator) modelAnimator.SetTrigger("Fire");
             projectileComponent.config = config.projectileConfig;
             projectileComponent.TeamConfig = _teamConfig;
             projectileComponent.DamageableCollided += damageable =>
@@ -56,9 +58,7 @@ namespace MonoBehaviours
                 if (damageable.TryGetComponent<IKillable>(out var killable) &&
                     damageable.TryGetComponent<IRewardMoney>(out var rewardMoney) &&
                     killable.IsDead)
-                {
                     FindObjectOfType<MoneyPurse>().AddReward(rewardMoney);
-                }
             };
             AttackedTarget?.Invoke(target);
         }
@@ -80,6 +80,7 @@ namespace MonoBehaviours
         public event Action Killed;
 
         public bool IsDead => _currentHealth <= 0;
+
         public void Kill()
         {
             _currentHealth = 0;
