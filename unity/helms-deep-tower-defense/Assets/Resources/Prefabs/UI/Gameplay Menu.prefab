@@ -962,6 +962,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6615555722995960130}
     m_Modifications:
+    - target: {fileID: 401731545574840760, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 401731545574840760, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179798718445833670, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
+      propertyPath: m_fontSize
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179798718445833670, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081896979541105537, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
+      propertyPath: m_fontSize
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081896979541105537, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5973805499250392726, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1046,6 +1070,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8289289627536944129, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 8289289627536944129, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -40
+      objectReference: {fileID: 0}
     - target: {fileID: 8650657792014615337, guid: aa56416750e3d40e4b6696c7af1640ea, type: 3}
       propertyPath: m_Name
       value: Camera Cycler
@@ -1094,11 +1126,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831787437117457353, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 150
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 2831787437117457353, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 130
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 2831787437117457353, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1151,6 +1183,30 @@ PrefabInstance:
     - target: {fileID: 2831787437117457366, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
       propertyPath: m_Name
       value: Buy Basic Tower
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831787438027079081, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
+      propertyPath: m_fontSize
+      value: 37.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831787438027079081, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 48
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831787438027079094, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831787438027079094, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831787438027079094, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2831787438027079094, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c19d572f2a750d40bd83728f364bb2c, type: 3}
