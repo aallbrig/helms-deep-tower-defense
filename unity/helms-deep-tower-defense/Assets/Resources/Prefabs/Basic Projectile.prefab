@@ -75,11 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42970c22410445868e36aec6663dcc3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  layerMaskFilter:
-    serializedVersion: 2
-    m_Bits: 0
-  impactEffect: {fileID: 6385665651227388946, guid: 103e1681bbce44b7e91a853d53d0e51d, type: 3}
+  config: {fileID: 0}
 --- !u!1 &3829346613921561633
 GameObject:
   m_ObjectHideFlags: 0
