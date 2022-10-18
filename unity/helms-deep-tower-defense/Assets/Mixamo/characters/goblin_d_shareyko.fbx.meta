@@ -30,8 +30,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: eyes_eyes_lambert.001
+    second: {fileID: 2100000, guid: cecd5d878c2ad5d44b23a2cc27ede14e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: phong1
     second: {fileID: 2100000, guid: 59438a01289f748c188d916de71e0278, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phong1.001
+    second: {fileID: 2100000, guid: b0d827a3b3ba2844085b865bf2b66ddc, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
