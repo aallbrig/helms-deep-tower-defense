@@ -29,6 +29,22 @@ namespace Tests.PlayMode.Scenarios.ForCameraCycler
         }
 
         [UnityTest]
+        public IEnumerator CameraCycler_DetectsAllCinemachineVirtualCameras_InScene_EvenIfInactive()
+        {
+            var instance = _prefabSpawner.Spawn();
+            TestCameraLookAt(instance.transform);
+            var cyclerComponent = instance.GetComponent<CameraCycler>();
+
+            new GameObject().AddComponent<CinemachineVirtualCamera>();
+            new GameObject().AddComponent<CinemachineVirtualCamera>();
+            var inactiveVCam = new GameObject().AddComponent<CinemachineVirtualCamera>();
+            inactiveVCam.gameObject.SetActive(false);
+            yield return null;
+
+            Assert.AreEqual(3, cyclerComponent.cameras.Length);
+        }
+
+        [UnityTest]
         public IEnumerator CameraCycler_CyclesThroughVirtualCameras_ForwardAndBackward()
         {
             var instance = _prefabSpawner.Spawn();

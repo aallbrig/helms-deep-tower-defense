@@ -17,8 +17,11 @@ namespace MonoBehaviours.UI
 
         private void InitializeCameras() =>
             // sort the list of cinemachine virtual cameras by priority
+            // optimization note: yes linq creates garbage but this method is called only once so honestly no biggie
+            // ... and yea, if my scene gets too big and/or hierarchical, I'll want to consider changing FindObjectsOfType
+            // API call
             cameras = (
-                from v in FindObjectsOfType<CinemachineVirtualCamera>()
+                from v in FindObjectsOfType<CinemachineVirtualCamera>(true)
                 orderby v.Priority descending
                 select v
             ).ToArray();
