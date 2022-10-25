@@ -30,6 +30,7 @@ namespace MonoBehaviours.Controllers
         }
         private void OnEnable() => _input.Enable();
         private void OnDisable() => _input.Disable();
+        private void OnDestroy() => EnhancedTouchSupport.Disable();
         private void HandleTwoFingerTouch(Touch firstTouch, Touch secondTouch)
         {
             if (firstTouch.phase == TouchPhase.Began || secondTouch.phase == TouchPhase.Began)
@@ -45,9 +46,20 @@ namespace MonoBehaviours.Controllers
 
             var multiTouchDistanceDelta = Mathf.Abs(newMultiTouchDistance - _lastMultiTouchDistance);
             var zoomIn = newMultiTouchDistance < _lastMultiTouchDistance;
+            var zoomOut = newMultiTouchDistance > _lastMultiTouchDistance;
             var zoomSpeed = Mathf.Lerp(1f, 10f, multiTouchDistanceDelta);
             // if distance is greater, the player is trying to zoom out
+            if (_lastMultiTouchDistance != 0 && zoomIn)
+            {
+                Debug.Log("Zoom in!");
+                _transform.position -= zoomSpeed * Time.deltaTime * _transform.forward;
+            }
             // if distance is lesser, the player is trying to zoom in
+            if (_lastMultiTouchDistance != 0 && zoomOut)
+            {
+                Debug.Log("Zoom out!");
+                _transform.position += zoomSpeed * Time.deltaTime * _transform.forward;
+            }
             // TODO: player tries to rotate camera
 
             _lastMultiTouchDistance = newMultiTouchDistance;
